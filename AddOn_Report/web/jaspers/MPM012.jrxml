@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MPM012" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7b94d965-abf5-4e05-9b2b-fb057cfdaa12">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="M3OLD"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
+	<parameter name="whs" class="java.lang.String"/>
+	<parameter name="username" class="java.lang.String"/>
+	<parameter name="tdate" class="java.lang.String"/>
+	<parameter name="fdate" class="java.lang.String"/>
+	<parameter name="company" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT *
+ FROM (
+ 
+ 
+ select vhcono,vhfaci,vhwhlo,vhstdt vhfstd,vhprno,substr(mmfuds,1,40)  mmfuds,vhmfno,phexpc,vhwhst,
+           vhchid,vhrefd,vhwcln
+from mwohed,mitmas,mpdhed
+where vhstdt between $P{fdate}
+  and  $P{tdate}
+  and   vhwhlo = $P{whs}
+  and   vhcono = $P{company}
+  and   vhcono = phcono
+  and   vhcono = mmcono
+  and   vhfaci  = phfaci
+  and   vhprno = phprno
+  and   vhprno = mmitno
+order by vhcono,vhfaci,vhwhlo,vhfstd,vhmfno 
+) AS a 
+LEFT JOIN (  
+ 
+
+ 
+  select substr(ccrow3,1,40)  as Ncono , cccono
+  from M3FDBPRD.cmndiv 
+  where  cccono ='10'
+    and ccdivi > '000' 
+   
+
+ 
+ ) AS z 
+ ON  a.vhcono = z.cccono
+ 
+ LEFT JOIN (  
+   select mwwhnm, mwcono
+    from mitwhl
+    where mwwhlo = $P{whs}
+     and mwcono = '10'
+     ) AS n 
+    ON  a.vhcono = n.mwcono]]>
+	</queryString>
+	<field name="VHCONO" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="VHCONO"/>
+	</field>
+	<field name="VHFACI" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="VHFACI"/>
+	</field>
+	<field name="VHWHLO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="VHWHLO"/>
+	</field>
+	<field name="VHFSTD" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="VHFSTD"/>
+	</field>
+	<field name="VHPRNO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="VHPRNO"/>
+	</field>
+	<field name="MMFUDS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="MMFUDS"/>
+	</field>
+	<field name="VHMFNO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="VHMFNO"/>
+	</field>
+	<field name="PHEXPC" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="PHEXPC"/>
+	</field>
+	<field name="VHWHST" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="VHWHST"/>
+	</field>
+	<field name="VHCHID" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="VHCHID"/>
+	</field>
+	<field name="VHREFD" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="VHREFD"/>
+	</field>
+	<field name="VHWCLN" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="VHWCLN"/>
+	</field>
+	<field name="NCONO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="NCONO"/>
+	</field>
+	<field name="CCCONO" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="CCCONO"/>
+	</field>
+	<field name="MWWHNM" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="MWWHNM"/>
+	</field>
+	<field name="MWCONO" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="MWCONO"/>
+	</field>
+	<group name="MoGroup">
+		<groupExpression><![CDATA[$F{VHFSTD}]]></groupExpression>
+	</group>
+	<pageHeader>
+		<band height="130" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="40" height="20" forecolor="#2020FF" uuid="367ae32b-338a-4ca5-bce6-8f221e3fc6e4"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<text><![CDATA[ Report : MPM012]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="40" height="20" forecolor="#2020FF" uuid="772177d3-e656-4ca7-bc44-cdc3e7c4ee0b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<text><![CDATA[Username]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="240" y="30" width="100" height="20" forecolor="#2020FF" uuid="84d0e5e8-95fd-4b83-af7b-3cb52daec4cd"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<text><![CDATA[List Mo Report]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="50" width="60" height="20" forecolor="#82002A" uuid="85c87836-9960-4b0f-80d1-bb79f1f66dfb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="TH SarabunPSK" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Warehouse]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="70" width="60" height="20" forecolor="#82002A" uuid="1b331c1e-d4ff-4c49-91e6-d0eb3f87db41"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="TH SarabunPSK" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[From Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="440" y="0" width="30" height="20" forecolor="#2020FF" uuid="1360474b-4b3f-4fae-b6ae-0c30697bbc2c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<text><![CDATA[Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="290" y="70" width="20" height="20" forecolor="#82002A" uuid="2af26800-7a3b-4cc4-98bd-8d2cc51a95aa"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="TH SarabunPSK" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[To]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="240" y="50" width="50" height="20" forecolor="#82002A" uuid="ef1681d8-e861-4416-b617-c9142eabee46"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VHWHLO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="290" y="50" width="150" height="20" forecolor="#82002A" uuid="8fa168b1-a378-4076-961c-74497d3d60e1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MWWHNM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="215" y="10" width="150" height="20" forecolor="#82002A" uuid="471153f4-fe5e-4a40-8a76-144ea36eb515"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NCONO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="40" y="20" width="60" height="20" forecolor="#2020FF" uuid="6d8b5109-7d90-48b8-864e-a42f601b9959"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{username}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="240" y="70" width="50" height="20" forecolor="#82002A" uuid="2c581c9a-f735-49ab-9857-dc36647e9279"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fdate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="310" y="70" width="80" height="20" forecolor="#82002A" uuid="34a32cf8-4637-41e6-8153-337ffb174da1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{tdate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="440" y="20" width="30" height="20" forecolor="#2020FF" uuid="351755e1-e811-47b4-a95d-cbfeee3ef19b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page:"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="470" y="20" width="10" height="20" forecolor="#2020FF" uuid="85cbb606-a689-4215-9ee5-09e3b5e2a197"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="480" y="20" width="20" height="20" forecolor="#2020FF" uuid="4d4d8cf1-8836-48b0-a60d-7dac0160acfc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["of "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MMM-yy h:mm:ss">
+				<reportElement x="470" y="0" width="74" height="20" forecolor="#2020FF" uuid="0797002f-8de2-4474-92be-4aa6db566b82"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="40" y="0" width="40" height="20" forecolor="#2020FF" uuid="a5189046-786e-4ab7-a531-716a555848a4"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<text><![CDATA[MPM012]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="30" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="40" splitType="Stretch">
+			<textField>
+				<reportElement x="219" y="20" width="161" height="20" forecolor="#2020FF" uuid="dafc8b3e-225b-4d32-934c-489596c19b94">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="91b0ffd0-bd3e-42cf-bfba-44bd865a417e"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MMFUDS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="380" y="20" width="30" height="20" forecolor="#2020FF" uuid="8609cb92-962a-409c-8edc-137b840544be">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="46232804-f63d-401b-a7d7-6d72ab60cbdf"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VHWHST}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="510" y="20" width="44" height="20" forecolor="#2020FF" uuid="b0c17313-d07a-4df9-8392-4175ceba6be2">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6a75cc2b-f968-4e9d-8379-6690b464d5f3"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VHCHID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="0" y="20" width="20" height="20" isPrintInFirstWholeBand="true" forecolor="#2020FF" uuid="fa3a425a-b532-436a-9b8c-5502577e4dea">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="40b7a221-3fab-46ff-a3da-ec6a8f38c4b3"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VHFACI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="150" y="20" width="69" height="20" forecolor="#2020FF" uuid="09d79d92-2f8d-46b1-b115-f22678ee600f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="240cfe1e-da53-45b9-91f6-a0fe1ee549ac"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VHPRNO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="470" y="20" width="40" height="20" forecolor="#2020FF" uuid="76171e63-864b-47c5-bada-feb66f20992d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="30cf875c-3954-40c2-9487-650a94fd5ed3"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VHWCLN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="90" y="20" width="60" height="20" forecolor="#2020FF" uuid="aed4731f-b1b0-4cca-8bb4-c6e94dce4081">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1f9afdcf-da77-4798-b005-5620a8462091"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VHMFNO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="41" y="20" width="49" height="20" isPrintInFirstWholeBand="true" forecolor="#2020FF" uuid="ab4d793f-5bb6-46f0-9c10-299252ebda32">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="80ed6ae5-91e8-4cb6-9bf5-ce38f5a613f9"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VHFSTD}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="20" y="20" width="21" height="20" isPrintInFirstWholeBand="true" forecolor="#2020FF" uuid="c07c0306-5896-498c-af4d-16db5132d57f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8d3a2f14-e19a-4a0f-916d-a30187981341"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VHWHLO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="410" y="20" width="60" height="20" forecolor="#2020FF" uuid="a38f6b07-b733-409b-a1bf-ad69d5bc12dd">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="52990404-d24d-4495-9f81-1b932ed4aea0"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VHREFD}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="20" y="0" width="21" height="20" forecolor="#2020FF" uuid="547f5efe-7c2d-43ab-b664-ea21350670b4"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="0" width="20" height="20" forecolor="#2020FF" uuid="213dcaf7-ad6a-40c9-825d-43fb95d5a57e"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="90" y="0" width="60" height="20" forecolor="#2020FF" uuid="89345a6b-4012-4090-9c1a-2eab4fc04253"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="150" y="0" width="69" height="20" forecolor="#2020FF" uuid="2f48cf64-a321-48f2-ac87-357b38489c3b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="219" y="0" width="161" height="20" forecolor="#2020FF" uuid="c57cc363-e2aa-4eb7-aef0-b1078873bc28"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="380" y="0" width="30" height="20" forecolor="#2020FF" uuid="e9146cf3-92e8-4414-87cf-a4ac2db759a7"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="410" y="0" width="60" height="20" forecolor="#2020FF" uuid="79eb38ed-d717-45f7-8643-e28d967e9209"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="470" y="0" width="40" height="20" forecolor="#2020FF" uuid="c08c7787-111e-4507-ad75-cca185d2fd88"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="510" y="0" width="44" height="20" forecolor="#2020FF" uuid="e2532c05-6566-4e0b-b49c-c1581e5ece64"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="0" width="20" height="20" forecolor="#2020FF" uuid="897cfb90-5314-46af-928d-af09e614bf19"/>
+				<box>
+					<pen lineColor="#2020FF"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<text><![CDATA[Faci]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="0" width="21" height="20" forecolor="#2020FF" uuid="d2900d09-dc75-4c46-a4b1-7378dc48998c"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<text><![CDATA[Whs]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="90" y="0" width="60" height="20" forecolor="#2020FF" uuid="dd7c0a7e-f923-4588-ac1b-0cfe587d9c13"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<text><![CDATA[MO. NO.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="150" y="0" width="69" height="20" forecolor="#2020FF" uuid="72646978-f84d-4895-a2a7-be29d79fb756"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<text><![CDATA[Product]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="219" y="0" width="161" height="20" forecolor="#2020FF" uuid="e132e039-38a5-41d3-a408-498f224eabda"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="0" width="30" height="20" forecolor="#2020FF" uuid="69e09cac-5557-4592-8905-300dacbcde60"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="410" y="0" width="60" height="20" forecolor="#2020FF" uuid="f390f374-8a0f-4f8e-acf5-ddee02d5f159"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<text><![CDATA[CLose Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="470" y="0" width="40" height="20" forecolor="#2020FF" uuid="19d96a1d-df90-45fd-81c6-6d10dce5be9e"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<text><![CDATA[MO Type]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="510" y="0" width="44" height="20" forecolor="#2020FF" uuid="7deabda0-d602-43e6-8548-4f8805b70261"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<text><![CDATA[Report By]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="40" y="0" width="50" height="20" forecolor="#2020FF" uuid="18e3ded1-140b-45ff-9359-12d7377c7c77"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="41" y="0" width="49" height="20" forecolor="#2020FF" uuid="0389a684-5575-4dc6-92aa-ca7aa5963e1b"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<text><![CDATA[MO Date]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<noData>
+		<band height="50">
+			<staticText>
+				<reportElement x="260" y="17" width="100" height="30" uuid="479da9fb-482d-4c0f-8ad2-411a58396cb5"/>
+				<text><![CDATA[Nodata ]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

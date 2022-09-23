@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MPM024" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9395ac6b-b6bf-41b0-8979-8627ce10f701">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="M3OLD"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="Company" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[
+SELECT * 
+
+FROM (select mtridn,mtttyp,mtitno,mmfuds,mmunms,mtbano,
+           sum(mttrqt) rm_qty,
+           sum(mttrpr*mttrqt*-1.00) amt,sum(mtcawe)  pcs
+from mittra,mitmas
+where  mtttyp = 11
+     and mtcono = mmcono
+     and mtitno = mmitno
+     and mtcono = $P{Company}
+group by mtridn,mtttyp,mtitno,mmfuds,mmunms,mtbano
+order by mtitno,mtbano
+) AS aa 
+LEFT JOIN 
+
+(select mtttyp mtttyp3,mtprmf,mtbano mtbano2,
+           sum(mttrqt) rm_qty1,
+           sum(mttrpr*mttrqt) amt1,sum(mtcawe)  pcs2
+from mittra,mitmas
+where mtttyp = 10
+     and mtcono = mmcono
+     and mtitno = mmitno
+     and  mtcono = $P{Company}
+group by mtttyp,mtprmf,mtbano
+order by mtbano2) AS bb 
+ON aa.mtitno = bb.mtprmf
+
+LEFT JOIN (
+
+
+select mtridn mtridn3,mtttyp mtttyp1,mtbano mtbano3,
+           sum(mttrqt) rm_qty4,
+           sum(mttrpr*mttrqt) amt4,sum(mtcawe) pcs3
+from mittra,mitmas
+where  mtttyp = 13
+     and mtcono = mmcono
+     and mtitno = mmitno
+     and mtcono = $P{Company}
+group by mtridn,mtttyp,mtbano
+order by mtbano3) AS cc
+ON cc.mtridn3 = aa.mtitno 
+LEFT JOIN 
+(select vhcono,vhfaci,vhorty,vhfstd,vhprno,mmfuds,vhmfno,phexpc,vhwhst
+from mwohed,mitmas,mpdhed
+where   vhfaci = phfaci
+  and  vhprno = phprno
+  and vhprno = mmitno
+  and vhcono = $P{Company}
+  and vhcono = phcono
+  and vhcono = mmcono
+order by vhcono,vhfaci,vhorty,vhfstd,vhprno,vhmfno) AS dd 
+ON dd.vhmfno = aa.mtitno]]>
+	</queryString>
+	<field name="MTRIDN" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTRIDN"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTRIDN"/>
+	</field>
+	<field name="MTTTYP" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="MTTTYP"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTTTYP"/>
+	</field>
+	<field name="MTITNO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTITNO"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTITNO"/>
+	</field>
+	<field name="MMFUDS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MMFUDS"/>
+		<property name="com.jaspersoft.studio.field.label" value="MMFUDS"/>
+	</field>
+	<field name="MMUNMS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MMUNMS"/>
+		<property name="com.jaspersoft.studio.field.label" value="MMUNMS"/>
+	</field>
+	<field name="MTBANO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTBANO"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTBANO"/>
+	</field>
+	<field name="RM_QTY" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="RM_QTY"/>
+		<property name="com.jaspersoft.studio.field.label" value="RM_QTY"/>
+	</field>
+	<field name="AMT" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="AMT"/>
+		<property name="com.jaspersoft.studio.field.label" value="AMT"/>
+	</field>
+	<field name="PCS" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="PCS"/>
+		<property name="com.jaspersoft.studio.field.label" value="PCS"/>
+	</field>
+	<field name="MTTTYP3" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="MTTTYP3"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTTTYP3"/>
+	</field>
+	<field name="MTPRMF" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTPRMF"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTPRMF"/>
+	</field>
+	<field name="MTBANO2" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTBANO2"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTBANO2"/>
+	</field>
+	<field name="RM_QTY1" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="RM_QTY1"/>
+		<property name="com.jaspersoft.studio.field.label" value="RM_QTY1"/>
+	</field>
+	<field name="AMT1" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="AMT1"/>
+		<property name="com.jaspersoft.studio.field.label" value="AMT1"/>
+	</field>
+	<field name="PCS2" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="PCS2"/>
+		<property name="com.jaspersoft.studio.field.label" value="PCS2"/>
+	</field>
+	<field name="MTRIDN3" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTRIDN3"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTRIDN3"/>
+	</field>
+	<field name="MTTTYP1" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="MTTTYP1"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTTTYP1"/>
+	</field>
+	<field name="MTBANO3" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTBANO3"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTBANO3"/>
+	</field>
+	<field name="RM_QTY4" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="RM_QTY4"/>
+		<property name="com.jaspersoft.studio.field.label" value="RM_QTY4"/>
+	</field>
+	<field name="AMT4" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="AMT4"/>
+		<property name="com.jaspersoft.studio.field.label" value="AMT4"/>
+	</field>
+	<field name="PCS3" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="PCS3"/>
+		<property name="com.jaspersoft.studio.field.label" value="PCS3"/>
+	</field>
+	<field name="VHCONO" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="VHCONO"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHCONO"/>
+	</field>
+	<field name="VHFACI" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VHFACI"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHFACI"/>
+	</field>
+	<field name="VHORTY" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VHORTY"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHORTY"/>
+	</field>
+	<field name="VHFSTD" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="VHFSTD"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHFSTD"/>
+	</field>
+	<field name="VHPRNO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VHPRNO"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHPRNO"/>
+	</field>
+	<field name="COLUMN_27" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MMFUDS"/>
+		<property name="com.jaspersoft.studio.field.label" value="MMFUDS"/>
+	</field>
+	<field name="VHMFNO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VHMFNO"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHMFNO"/>
+	</field>
+	<field name="PHEXPC" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="PHEXPC"/>
+		<property name="com.jaspersoft.studio.field.label" value="PHEXPC"/>
+	</field>
+	<field name="VHWHST" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VHWHST"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHWHST"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="86" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="0df40fd4-fded-484c-bf21-c42a6a4e7cdd"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<text><![CDATA[Report : MPM024]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="40" height="20" uuid="ea9c7b4c-ce2e-4a9c-abbf-46d43ebdfcbf"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<text><![CDATA[Username]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="0" width="160" height="20" uuid="209419ab-b79e-4b0d-a74c-1be76426eaf1"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<text><![CDATA[BANGKOK RANCH PUBLIC COMPANY LIMITED]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="20" width="160" height="20" uuid="9b5f4c92-a7bc-410b-9bf5-51784766694f"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<text><![CDATA[Summary MO By Lot  Report]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="460" y="30" width="30" height="20" uuid="6fc92c82-d898-4314-ae3a-44cfc38c204f"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="490" y="30" width="10" height="20" uuid="1f4205d5-8f54-4e51-bf58-12a706ccfda3"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="500" y="30" width="20" height="20" uuid="127a3d86-e3d3-43c3-b8dc-588d8517a1e6"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["of "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MMM-yy h:mm:ss">
+				<reportElement x="450" y="0" width="86" height="30" uuid="614e2e2a-2502-46d1-b018-63f7048aa53d"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="40" y="20" width="160" height="20" uuid="72f7fa36-1840-44e7-a9f2-f5a72e7e62d4"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<text><![CDATA[BANGKOK RANCH PUBLIC COMPANY LIMITED]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="50" width="160" height="20" uuid="f646dbda-e41f-4e05-9b52-f1e9c1f95645"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12"/>
+				</textElement>
+				<text><![CDATA[MPM024]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="495" y="0" width="60" height="30" uuid="96c8f043-b7ac-43c0-8865-73e3b7b26277"/>
+				<text><![CDATA[Dif Yield]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="435" y="0" width="60" height="30" uuid="b33ce781-fd62-4a08-8950-9d4a3c9502f2"/>
+				<text><![CDATA[% Act Yield]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="395" y="0" width="40" height="30" uuid="081b2bed-3d13-4ce9-bb2c-cbc5f733b8ef"/>
+				<text><![CDATA[% Std]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="355" y="0" width="40" height="30" uuid="9eab8343-55db-4c22-9a21-04bed87b93df"/>
+				<text><![CDATA[Mo No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="335" y="0" width="20" height="30" uuid="ecf41b52-f143-49b1-beee-eea9ab516b7c"/>
+				<text><![CDATA[St]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="170" y="0" width="165" height="30" uuid="c3334363-89b7-419c-ab28-528ad01354c8"/>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="40" y="0" width="40" height="30" uuid="4220b1a4-4ab9-4b2a-99ef-6df7fef6dc92"/>
+				<text><![CDATA[Order]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="120" y="0" width="50" height="30" uuid="b7688ddd-6d09-4f00-977b-4a0f224e7d8e"/>
+				<text><![CDATA[Production]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="40" height="30" uuid="9331e1dc-09aa-4fb7-9d65-f4faeae768e4"/>
+				<text><![CDATA[Fac]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="0" width="40" height="30" uuid="db335806-aa52-4af2-96bf-3b5a672b92c1"/>
+				<text><![CDATA[Pro Date]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="360" splitType="Stretch">
+			<textField>
+				<reportElement x="495" y="0" width="60" height="30" uuid="81e42ee8-8c2b-4150-b0c1-8abaab3ccf52"/>
+				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="435" y="0" width="60" height="30" uuid="ec4bb198-a475-45e8-b062-deb99dd78999"/>
+				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="395" y="0" width="40" height="30" uuid="7dacc4ab-e904-42d5-a255-08a899d5dfac"/>
+				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="355" y="0" width="40" height="30" uuid="676caf26-550f-4a85-bb8c-1170361b561e"/>
+				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="335" y="0" width="20" height="30" uuid="6a0291b8-5c22-4953-b8bc-2e9fef69b2ae"/>
+				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="170" y="0" width="165" height="30" uuid="8c6d4f60-411e-4a2b-a8b2-4f73cce85516"/>
+				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="120" y="0" width="50" height="30" uuid="29cab2f2-39ff-4ca8-958d-9c7b1dbf3cc1"/>
+				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="0" width="40" height="30" uuid="22f6c7a2-1793-448b-a676-e4ee05c30c6e"/>
+				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="40" y="0" width="40" height="30" uuid="8ad9e571-3f2a-4f30-b3b7-c9fdce0c79e9"/>
+				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="40" height="30" uuid="59be5af4-dd9d-4c8b-b17a-99b5d8234ff4"/>
+				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="70" width="80" height="30" uuid="aca40823-6a9c-4b2d-af13-c9288417274e"/>
+				<text><![CDATA[Material ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="70" width="190" height="30" uuid="e66824de-574a-4b28-bd97-f5a051db651f"/>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="270" y="70" width="30" height="30" uuid="d1c44729-4301-495b-bcf3-8a92d870c00e"/>
+				<text><![CDATA[Unit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="70" width="40" height="30" uuid="517d410c-b793-408a-985e-51ee7bb14f98"/>
+				<text><![CDATA[Lot]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="340" y="70" width="40" height="30" uuid="3e1ac8fb-d125-4b63-910a-9875c7dd0262"/>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="70" width="40" height="30" uuid="3baccd99-e3ba-4b2a-9f01-6a4b4115ea36"/>
+				<text><![CDATA[PCS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="420" y="70" width="60" height="30" uuid="abc2cc8c-ea96-467a-bd0b-6acfd0c73863"/>
+				<text><![CDATA[Avg. PCS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="420" y="170" width="60" height="30" uuid="3404d154-3d5b-4a77-aa16-88d6537dd8d8"/>
+				<text><![CDATA[Input]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="340" y="170" width="40" height="30" uuid="80d94a87-ddab-457b-a0e6-633641a18ad9"/>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="170" width="40" height="30" uuid="155d650e-a44d-453d-b26b-dfec38de8073"/>
+				<text><![CDATA[PCS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="170" width="340" height="30" uuid="be05ebb6-f9aa-4dfd-86d0-cedafe799dcd"/>
+				<text><![CDATA[Lot]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="420" y="270" width="60" height="30" uuid="73817001-4d54-4a33-9f24-43c315835b96"/>
+				<text><![CDATA[Amt]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="270" width="40" height="30" uuid="ad2a1c89-5df9-4788-82c3-6edca1ea4d72"/>
+				<text><![CDATA[PCS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="340" y="270" width="40" height="30" uuid="4a0b392c-0eb7-478c-a984-5ff869ffc04c"/>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="270" width="340" height="30" uuid="aca4795f-8d98-4cdf-a4fd-ce5d9cd9a062"/>
+				<text><![CDATA[Lot]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="130" width="340" height="30" uuid="22df7eff-bc39-4a56-8b30-c1d47a4858f4"/>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="100" width="480" height="30" uuid="8e8426ba-7b55-453c-bb2f-1630baf530d1"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="190" width="480" height="30" uuid="20ffec12-f079-4f2a-8301-5d0b560679d2"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="220" width="340" height="30" uuid="78b486ac-ab90-4832-a5ba-1caa69771a53"/>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="330" width="340" height="30" uuid="d5b5241b-13e8-4c15-b4df-3a704668c609"/>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="300" width="480" height="30" uuid="1d144f60-0169-4fcd-8dff-862fed3a6f18"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

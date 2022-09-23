@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.14.0.final using JasperReports Library version 6.14.0-2ab0d8625be255bf609c78e1181801213e51db8f  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MO_Report" pageWidth="1200" pageHeight="9999" orientation="Landscape" columnWidth="1160" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4439eec3-2861-4aad-91c1-237dbcb07663">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DB2"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="126"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="868"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
+	<property name="ireport.jasperserver.url" value="http://192.200.9.124:8080/jasperserver/"/>
+	<property name="ireport.jasperserver.user" value="jasperadmin"/>
+	<property name="ireport.jasperserver.report.resource" value="/MPM_REPORT/GRN_LOTNO_files/main_jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/MPM_REPORT/GRN_LOTNO"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="cono" class="java.lang.String"/>
+	<parameter name="grnno" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT A.ICPUNO PO_NO,A.ICREPN GRN_NO,MT.MTITNO,MT.MTBANO LOT_GRN,A.ICSUDO INV_RECEIPT,B.*
+FROM
+(SELECT ICCONO,ICPUNO,SUBSTR(ICSUDO,3,7) ICSUDO,ICREPN
+FROM M3FDBTST.MPLIND
+WHERE ICPUNO =  $P{grnno} 
+AND ICCONO =  $P{cono} 
+) A
+LEFT JOIN M3FDBTST.MITTRA AS MT ON MT.MTCONO = A.ICCONO AND MT.MTTTYP = '25'
+AND MT.MTRIDN = A.ICPUNO
+LEFT JOIN
+(SELECT UAIVNO,MTRIDN,MTCONO,MTITNO,MMITDS,MTBANO, SUM(MTTRQT*-1) INVQTY,SUM(MTCAWE*-1) INVCAWE
+FROM M3FDBTST.MITTRA, M3FDBTST.MITMAS,M3FDBTST.ODHEAD
+WHERE MTCONO = 10
+--AND UAIVNO IN ('4206564','4206565')
+AND UAYEA4 = 2022
+AND MTTTYP = 31
+AND MTITNO = MMITNO
+AND MTCONO = MMCONO
+AND MTCONO = UACONO
+AND UAORNO = MTRIDN
+AND MTWHLO IN ('A11','A80','A81','A82','A83','A84','A85','A86','A87','A89','F31','F11')
+GROUP BY UAIVNO,MTRIDN,MTCONO,MTITNO,MMITDS,MTBANO) B
+ON B.UAIVNO = A.ICSUDO]]>
+	</queryString>
+	<field name="PO_NO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="PO_NO"/>
+		<property name="com.jaspersoft.studio.field.label" value="PO_NO"/>
+	</field>
+	<field name="GRN_NO" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="GRN_NO"/>
+		<property name="com.jaspersoft.studio.field.label" value="GRN_NO"/>
+	</field>
+	<field name="MTITNO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTITNO"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTITNO"/>
+	</field>
+	<field name="LOT_GRN" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="LOT_GRN"/>
+		<property name="com.jaspersoft.studio.field.label" value="LOT_GRN"/>
+	</field>
+	<field name="INV_RECEIPT" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="INV_RECEIPT"/>
+		<property name="com.jaspersoft.studio.field.label" value="INV_RECEIPT"/>
+	</field>
+	<field name="UAIVNO" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="UAIVNO"/>
+		<property name="com.jaspersoft.studio.field.label" value="UAIVNO"/>
+	</field>
+	<field name="MTRIDN" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTRIDN"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTRIDN"/>
+	</field>
+	<field name="MTCONO" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="MTCONO"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTCONO"/>
+	</field>
+	<field name="COLUMN_9" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTITNO"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTITNO"/>
+	</field>
+	<field name="MMITDS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MMITDS"/>
+		<property name="com.jaspersoft.studio.field.label" value="MMITDS"/>
+	</field>
+	<field name="MTBANO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTBANO"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTBANO"/>
+	</field>
+	<field name="INVQTY" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="INVQTY"/>
+		<property name="com.jaspersoft.studio.field.label" value="INVQTY"/>
+	</field>
+	<field name="INVCAWE" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="INVCAWE"/>
+		<property name="com.jaspersoft.studio.field.label" value="INVCAWE"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="30">
+			<staticText>
+				<reportElement x="0" y="0" width="92" height="30" uuid="5f561fc8-d6e5-4f55-871f-532ee85506be">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8872583a-4b1a-4748-98ba-31f6fb1499db"/>
+				</reportElement>
+				<text><![CDATA[PO_NO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="92" y="0" width="89" height="30" uuid="19333ce4-c84c-415a-adc9-0129644d053a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cb36495d-3e4f-4f63-a24b-d7f2c5ea2e83"/>
+				</reportElement>
+				<text><![CDATA[GRN_NO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="181" y="0" width="89" height="30" uuid="6e55db65-e674-4f25-98ba-902d43b1d472">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="97059379-569c-43d0-b8b7-9902d174560d"/>
+				</reportElement>
+				<text><![CDATA[MTITNO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="270" y="0" width="89" height="30" uuid="bed418ed-113e-44ee-aa36-b8891d2eea7a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3ff2dca4-cf34-46a4-88e6-b7e9274a67ad"/>
+				</reportElement>
+				<text><![CDATA[LOT_GRN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="359" y="0" width="89" height="30" uuid="d619a42d-5a13-4623-97b4-8a26097cdd8e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="323a570e-b53a-423a-810d-969a67572f37"/>
+				</reportElement>
+				<text><![CDATA[INV_RECEIPT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="448" y="0" width="89" height="30" uuid="19cf8211-5638-40dc-a087-2190a510f097">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a5841447-e52f-4af4-95f5-c803697701f7"/>
+				</reportElement>
+				<text><![CDATA[UAIVNO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="537" y="0" width="89" height="30" uuid="6ad1eaf9-e61c-45c0-98c2-f58079128a59">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5f8d4d9d-5844-49e7-ab58-02f840489189"/>
+				</reportElement>
+				<text><![CDATA[MTRIDN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="626" y="0" width="89" height="30" uuid="e52c0cb9-cc63-48ce-8be8-83673352f948">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8a6e7073-a802-4ceb-b171-59d4990099fc"/>
+				</reportElement>
+				<text><![CDATA[MTCONO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="715" y="0" width="89" height="30" uuid="0bfa4a9e-9b6d-49e3-bda0-35ec4a6cae75">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8a873326-0c10-4053-bbc7-054fd09b1f7b"/>
+				</reportElement>
+				<text><![CDATA[MTITNO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="804" y="0" width="89" height="30" uuid="5582ed4c-831c-4087-953b-9198cbce749e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4123d6d7-c071-4811-abdd-f77a5e15a675"/>
+				</reportElement>
+				<text><![CDATA[MMITDS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="893" y="0" width="89" height="30" uuid="34ee9f6a-e34d-4df7-9591-72dd3b94ab2d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d8362b16-16ea-41f3-bc9d-91248bd9820d"/>
+				</reportElement>
+				<text><![CDATA[MTBANO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="982" y="0" width="89" height="30" uuid="b6398001-baaa-4af0-8c24-a2cbe82cbf85">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4d1b6daf-1117-4850-8fca-de1f80e3e557"/>
+				</reportElement>
+				<text><![CDATA[INVQTY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1071" y="0" width="89" height="30" uuid="c5d0e442-00aa-4167-aa75-e0597e35612c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5ca02021-88e4-46a8-a3c0-6ff72d5a9a58"/>
+				</reportElement>
+				<text><![CDATA[INVCAWE]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="92" height="20" uuid="dadcc797-b9ac-478b-96db-34eec632846d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8872583a-4b1a-4748-98ba-31f6fb1499db"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{PO_NO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="92" y="0" width="89" height="20" uuid="a2ca2c16-231f-43f5-9727-bf4998961e9a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cb36495d-3e4f-4f63-a24b-d7f2c5ea2e83"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{GRN_NO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="181" y="0" width="89" height="20" uuid="1b43f8a3-b320-4069-942a-b9039705cdd2">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="97059379-569c-43d0-b8b7-9902d174560d"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{MTITNO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="270" y="0" width="89" height="20" uuid="e71534ad-987f-4a61-b70c-349f7b96d71e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3ff2dca4-cf34-46a4-88e6-b7e9274a67ad"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{LOT_GRN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="359" y="0" width="89" height="20" uuid="54444224-932f-4840-bc9e-ba552ba32e5a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="323a570e-b53a-423a-810d-969a67572f37"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{INV_RECEIPT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="448" y="0" width="89" height="20" uuid="c035df08-3024-4241-89a5-8b75b3200e7d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a5841447-e52f-4af4-95f5-c803697701f7"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{UAIVNO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="537" y="0" width="89" height="20" uuid="39c27784-e8fc-48e9-b4c8-f5aed4a87c7b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5f8d4d9d-5844-49e7-ab58-02f840489189"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{MTRIDN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="626" y="0" width="89" height="20" uuid="d2f449cf-2cf6-4817-863d-84049d06c7fb">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8a6e7073-a802-4ceb-b171-59d4990099fc"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{MTCONO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="715" y="0" width="89" height="20" uuid="dd83e291-429d-44b2-b4c8-66f727d0c093">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8a873326-0c10-4053-bbc7-054fd09b1f7b"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{COLUMN_9}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="804" y="0" width="89" height="20" uuid="62704f9b-dc04-439d-a4de-78d0e9b806ac">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4123d6d7-c071-4811-abdd-f77a5e15a675"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{MMITDS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="893" y="0" width="89" height="20" uuid="1797a04d-3526-406e-be3c-8ebaaada3011">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d8362b16-16ea-41f3-bc9d-91248bd9820d"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{MTBANO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="982" y="0" width="89" height="20" uuid="14f74eaf-0ed4-456f-a90c-92064fd81ea1">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4d1b6daf-1117-4850-8fca-de1f80e3e557"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{INVQTY}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1071" y="0" width="89" height="20" uuid="1d07c4f6-e8fa-424e-b567-51263a12fbb5">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5ca02021-88e4-46a8-a3c0-6ff72d5a9a58"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{INVCAWE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
