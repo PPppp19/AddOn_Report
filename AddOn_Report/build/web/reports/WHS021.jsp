@@ -56,14 +56,14 @@
                 </div>
                 <div class="details-form-field">
                     <label>Lot. No.:</label>
-                    <input class="form-control form-control-user" id="vLotN" name="vLotN" type="text" placeholder="Input Lot. NO." />
+                    <input class="form-control form-control-user" id="lot" name="vLotN" type="text" placeholder="Input Lot. NO." />
                 </div>
             </form>
 
             <form align="center">
                 <hr class="my-4">
-                <button class="btn btn-primary mb-2" style="color:#FFFFFF;" form="detailsForm" name="report" value="MPM024" type="submit">PDF</button>
-                <button class="btn btn-primary mb-2" style="color:#FFFFFF;" form="detailsForm" name="report" value="MPM024_Excel"type="submit">Excel</button>
+                <button class="btn btn-primary mb-2" style="color:#FFFFFF;" form="detailsForm" name="report" value="WHS021" type="submit">PDF</button>
+                <button class="btn btn-primary mb-2" style="color:#FFFFFF;" form="detailsForm" name="report" value="WHS021_Excel"type="submit">Excel</button>
             </form> 
 
 

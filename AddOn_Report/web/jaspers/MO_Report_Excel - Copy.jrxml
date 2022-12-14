@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.14.0.final using JasperReports Library version 6.14.0-2ab0d8625be255bf609c78e1181801213e51db8f  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MO_Report" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4439eec3-2861-4aad-91c1-237dbcb07663">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DB2"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="126"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="868"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
+	<parameter name="cono" class="java.lang.String"/>
+	<parameter name="divi" class="java.lang.String"/>
+	<parameter name="fac" class="java.lang.String"/>
+	<parameter name="whs" class="java.lang.String"/>
+	<parameter name="mono" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR1" class="net.sf.jasperreports.engine.JasperReport"/>
+	<parameter name="SUBREPORT_DIR2" class="net.sf.jasperreports.engine.JasperReport"/>
+	<parameter name="SUBREPORT_DIR3" class="net.sf.jasperreports.engine.JasperReport"/>
+	<queryString>
+		<![CDATA[SELECT a.VHCONO,a.VHFACI,a.VHWHLO,a.VHPRNO,a.VHMFNO,a.VHSTDT,a.VHWHST,a.VHWHHS,b.VMRPQA,c.VHRVQA
+,ROUND(CAST(c.VHRVQA AS DECIMAL(15,4)) / CAST(b.VMRPQA AS DECIMAL(15,4)),4) AS YIELD,d.COMPANY
+FROM --Header
+(SELECT VHCONO,VHDIVI,VHFACI,VHWHLO,VHPRNO,VHMFNO,VHSTDT,VHWHST,VHWHHS
+FROM M3FDBPRD.MWOHED,M3FDBPRD.MWOMAT,M3FDBPRD.MITMAS
+WHERE VHCONO =  $P{cono} 
+AND VHFACI =   $P{fac} 
+AND VHWHLO =  $P{whs} 
+AND VHMFHL =  $P{mono} 
+--AND VHSTDT BETWEEN 20200701 AND 20200705
+--AND VHMFHL IN ('0010742519','0010976758','0011050114') 
+AND VHMFHL = VHMFNO
+AND VHCONO = VMCONO
+AND VHFACI = VMFACI
+AND VHPRNO = VMPRNO
+AND VHMFNO = VMMFNO
+AND VMBYPR = 0
+AND (VMREQT <> 0 OR VMRPQT <> 0)
+AND VMCONO = MMCONO
+AND VMMTNO = MMITNO
+GROUP BY VHCONO,VHDIVI,VHFACI,VHWHLO,VHPRNO,VHMFNO,VHSTDT,VHWHST,VHWHHS
+ORDER BY VHCONO,VHDIVI,VHFACI,VHWHLO,VHPRNO,VHMFNO,VHSTDT,VHWHST,VHWHHS) AS a
+LEFT JOIN --Input
+(SELECT VHCONO,VHDIVI,VHFACI,VHWHLO,VHMFNO,SUM(VMRPQA) AS VMRPQA
+FROM M3FDBPRD.MWOHED,M3FDBPRD.MWOMAT
+WHERE VHMFHL = VHMFNO
+AND VHCONO = VMCONO
+AND VHFACI = VMFACI
+AND VHPRNO = VMPRNO
+AND VHMFNO = VMMFNO
+AND VMBYPR = 0
+AND (VMREQT <> 0 OR VMRPQT <> 0)
+AND VMPEUN = 'KGS'
+GROUP BY VHCONO,VHDIVI,VHFACI,VHWHLO,VHMFNO) AS b
+ON b.VHCONO = a.VHCONO
+AND b.VHDIVI = a.VHDIVI
+AND b.VHFACI = a.VHFACI
+AND b.VHWHLO = a.VHWHLO
+AND b.VHMFNO = a.VHMFNO
+LEFT JOIN --Output Endproduct
+(SELECT VHCONO,VHDIVI,VHFACI,VHWHLO,VHMFHL,SUM(VHRVQA) AS VHRVQA
+FROM M3FDBPRD.MWOHED
+WHERE VHMFHL <> VHMFNO
+AND VHRVQT <> 0
+GROUP BY VHCONO,VHDIVI,VHFACI,VHWHLO,VHMFHL) AS c
+ON c.VHCONO = a.VHCONO
+AND c.VHDIVI = a.VHDIVI
+AND c.VHFACI = a.VHFACI
+AND c.VHWHLO = a.VHWHLO
+AND c.VHMFHL = a.VHMFNO
+LEFT JOIN 
+(SELECT CCCONO, CCDIVI, CCCONM, CCROW3, TRIM(CCCONO) || ' : ' || TRIM(CCDIVI) || ' : ' || TRIM(CCROW3)  AS COMPANY
+FROM M3FDBPRD.CMNDIV
+WHERE CCDIVI != ''
+ORDER BY CCCONO) AS d
+ON d.CCCONO = a.VHCONO
+AND d.CCDIVI = a.VHDIVI]]>
+	</queryString>
+	<field name="VHCONO" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="VHCONO"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHCONO"/>
+	</field>
+	<field name="VHFACI" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VHFACI"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHFACI"/>
+	</field>
+	<field name="VHWHLO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VHWHLO"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHWHLO"/>
+	</field>
+	<field name="VHPRNO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VHPRNO"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHPRNO"/>
+	</field>
+	<field name="VHMFNO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VHMFNO"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHMFNO"/>
+	</field>
+	<field name="VHSTDT" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="VHSTDT"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHSTDT"/>
+	</field>
+	<field name="VHWHST" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VHWHST"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHWHST"/>
+	</field>
+	<field name="VHWHHS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VHWHHS"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHWHHS"/>
+	</field>
+	<field name="VMRPQA" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="VMRPQA"/>
+		<property name="com.jaspersoft.studio.field.label" value="VMRPQA"/>
+	</field>
+	<field name="VHRVQA" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="VHRVQA"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHRVQA"/>
+	</field>
+	<field name="YIELD" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="YIELD"/>
+		<property name="com.jaspersoft.studio.field.label" value="YIELD"/>
+	</field>
+	<field name="COMPANY" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="COMPANY"/>
+		<property name="com.jaspersoft.studio.field.label" value="COMPANY"/>
+	</field>
+	<variable name="inputReQtyTotal" class="java.math.BigDecimal"/>
+	<variable name="inputRpQtyTotal" class="java.math.BigDecimal"/>
+	<variable name="byProdReQtyTotal" class="java.math.BigDecimal"/>
+	<variable name="byProdRpQtyTotal" class="java.math.BigDecimal"/>
+	<variable name="endProdReQtyTotal" class="java.math.BigDecimal"/>
+	<variable name="endProdRpQtyTotal" class="java.math.BigDecimal"/>
+	<group name="Group1" isStartNewColumn="true" isStartNewPage="true" isResetPageNumber="true" isReprintHeaderOnEachPage="true" keepTogether="true">
+		<groupExpression><![CDATA[$F{VHMFNO}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band height="20">
+				<textField evaluationTime="Group" evaluationGroup="Group1" pattern="#,##0.00#;(#,##0.00#-)" isBlankWhenNull="true">
+					<reportElement x="335" y="0" width="55" height="20" uuid="3439a411-37ba-4199-adb0-5b73d4469f08"/>
+					<textElement textAlignment="Right">
+						<font fontName="TH SarabunPSK" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{byProdReQtyTotal}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="Group1" pattern="#,##0.00#;(#,##0.00#-)" isBlankWhenNull="true">
+					<reportElement x="390" y="0" width="55" height="20" uuid="a28b6829-3e90-4abc-a594-ec10dbba163e"/>
+					<textElement textAlignment="Right">
+						<font fontName="TH SarabunPSK" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{byProdRpQtyTotal}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="42" splitType="Stretch">
+			<textField>
+				<reportElement x="50" y="0" width="100" height="14" uuid="a2cda616-8380-4fe6-baa6-95a91fe27279"/>
+				<box leftPadding="1" rightPadding="1"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VHMFNO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="50" height="14" uuid="79033407-4b6e-4f97-8f93-ac800f7e54b2"/>
+				<textElement textAlignment="Left">
+					<font fontName="TH SarabunPSK" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MO :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="14" width="50" height="14" uuid="6d71b68e-e1c4-442c-819b-7c3d859e9b14"/>
+				<textElement textAlignment="Left">
+					<font fontName="TH SarabunPSK" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BOM :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="28" width="50" height="14" uuid="6deff090-1936-4bc2-b39d-8a94d722636f"/>
+				<textElement textAlignment="Left">
+					<font fontName="TH SarabunPSK" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WHS :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="50" y="14" width="100" height="14" uuid="de630b92-8d12-4fa3-8c97-d3929d331034"/>
+				<box leftPadding="1" rightPadding="1"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VHPRNO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="50" y="28" width="100" height="14" uuid="0bc87b03-f1c7-4709-8ae0-b1e792667fb8"/>
+				<box leftPadding="1" rightPadding="1"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VHWHLO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="30" uuid="a9070d9c-cb54-4dc5-9950-00299008b0d4"/>
+				<subreportParameter name="cono">
+					<subreportParameterExpression><![CDATA[$F{VHCONO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="fac">
+					<subreportParameterExpression><![CDATA[$F{VHFACI}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="whs">
+					<subreportParameterExpression><![CDATA[$F{VHWHLO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="mono">
+					<subreportParameterExpression><![CDATA[$F{VHMFNO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<returnValue subreportVariable="reQtyTotal" toVariable="inputReQtyTotal" calculation="Sum"/>
+				<returnValue subreportVariable="rpQtyTotal" toVariable="inputRpQtyTotal" calculation="Sum"/>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR1}]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="50">
+			<textField evaluationTime="Group" evaluationGroup="Group1" pattern="#,##0.00#;(#,##0.00#-)" isBlankWhenNull="true">
+				<reportElement x="335" y="0" width="55" height="20" uuid="a969e817-7c11-4d21-b6f7-f4789ef8b5bc"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{inputReQtyTotal}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Group" evaluationGroup="Group1" pattern="#,##0.00#;(#,##0.00#-)" isBlankWhenNull="true">
+				<reportElement x="390" y="0" width="55" height="20" uuid="ea03e4b8-0557-492f-b2ac-2f886cf47b2a"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{inputRpQtyTotal}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="0" y="20" width="555" height="30" uuid="f447c3e0-5bca-4cff-8f80-96c32184dfde"/>
+				<subreportParameter name="cono">
+					<subreportParameterExpression><![CDATA[$F{VHCONO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="fac">
+					<subreportParameterExpression><![CDATA[$F{VHFACI}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="whs">
+					<subreportParameterExpression><![CDATA[$F{VHWHLO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="mono">
+					<subreportParameterExpression><![CDATA[$F{VHMFNO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<returnValue subreportVariable="reQtyTotal" toVariable="endProdReQtyTotal" calculation="Sum"/>
+				<returnValue subreportVariable="rpQtyTotal" toVariable="endProdRpQtyTotal" calculation="Sum"/>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR3}]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="50">
+			<textField evaluationTime="Group" evaluationGroup="Group1" pattern="#,##0.00#;(#,##0.00#-)" isBlankWhenNull="true">
+				<reportElement x="335" y="0" width="55" height="20" uuid="975945fd-f099-4775-b768-72f4f07619b2"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{endProdReQtyTotal}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Group" evaluationGroup="Group1" pattern="#,##0.00#;(#,##0.00#-)" isBlankWhenNull="true">
+				<reportElement x="390" y="0" width="55" height="20" uuid="6b633726-9793-4416-b4de-30052644753d"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{endProdRpQtyTotal}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="0" y="20" width="555" height="30" uuid="0d678b1e-ba6f-4965-b8d7-f57d43a53153"/>
+				<subreportParameter name="cono">
+					<subreportParameterExpression><![CDATA[$F{VHCONO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="fac">
+					<subreportParameterExpression><![CDATA[$F{VHFACI}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="whs">
+					<subreportParameterExpression><![CDATA[$F{VHWHLO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="mono">
+					<subreportParameterExpression><![CDATA[$F{VHMFNO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<returnValue subreportVariable="reQtyTotal" toVariable="byProdReQtyTotal" calculation="Sum"/>
+				<returnValue subreportVariable="rpQtyTotal" toVariable="byProdRpQtyTotal" calculation="Sum"/>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR2}]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

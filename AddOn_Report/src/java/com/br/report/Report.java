@@ -87,8 +87,114 @@ public class Report extends HttpServlet {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         Connection conn = null;
         try {
+            
 
-            if (request.getParameter("report").contentEquals("MO_Report")) {
+            if (request.getParameter("report").contentEquals("MPM001")) {
+
+                System.out.println("Mo mo    PDF __________1__________________");
+                conn = ConnectDB2.ConnectionDB();
+                String path = getServletContext().getRealPath("/jaspers/");
+                System.out.println("path: " + path);
+                Map parameters = new HashMap();
+//                System.out.println(request.getParameter("facility") + " : " + request.getParameter("warehouse") + " : " + request.getParameter("mono"));
+                parameters.put("cono", session.getAttribute("cono").toString());
+                parameters.put("divi", session.getAttribute("divi").toString());
+                parameters.put("fac", request.getParameter("fac").toString());
+                parameters.put("whs",  request.getParameter("whs").toString());
+                parameters.put("mono", request.getParameter("mono").toString());
+                parameters.put("username", session.getAttribute("user").toString());
+                parameters.put("com", session.getAttribute("cono").toString());
+//                parameters.put("com", session.getAttribute("cono").toString());
+
+
+//                parameters.put("cono", session.getAttribute("cono").toString());
+//                parameters.put("divi", "101");
+//                parameters.put("fac", "1A1");
+//                parameters.put("whs", "10");
+//                parameters.put("mono", "0012161088");
+//                parameters.put("username", "PPppp");
+   
+                
+//                parameters.put("imagesDir", path);
+
+                try {
+
+                    OutputStream outStream = response.getOutputStream();
+                    System.out.println(path + "MPM001.jrxml");
+                    JasperReport jasperReport = JasperCompileManager.compileReport(path + "MPM001.jrxml");
+                    JasperReport subjasperReport1 = JasperCompileManager.compileReport(path + "sub_mpm001_1.jrxml");
+                    JasperReport subjasperReport2 = JasperCompileManager.compileReport(path + "sub2.jrxml");
+                    JasperReport subjasperReport3 = JasperCompileManager.compileReport(path + "sub3.jrxml");
+
+                    parameters.put("SUBREPORT_DIR1", subjasperReport1);
+                    parameters.put("SUBREPORT_DIR2", subjasperReport2);
+                    parameters.put("SUBREPORT_DIR3", subjasperReport3);
+                    
+                    System.out.println("------------------------------");
+                    System.out.println("PPPPPPPPPPPPPP " + path );
+                    System.out.println(subjasperReport1);
+                    System.out.println(subjasperReport2);
+                    System.out.println(subjasperReport3);
+                    System.out.println("------------------------------");
+
+                    JasperPrint jasp = JasperFillManager.fillReport(jasperReport, parameters, conn);
+                    JasperExportManager.exportReportToPdfStream(jasp, outStream);
+
+                } catch (Exception ex) {
+                    Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            } 
+            
+            else if (request.getParameter("report").contentEquals("MPM001_Excel")) {
+                String path = getServletContext().getRealPath("/jaspers/");
+                Map parameters = new HashMap();
+                parameters.put("cono", session.getAttribute("cono").toString());
+                parameters.put("divi", session.getAttribute("divi").toString());
+                parameters.put("fac", request.getParameter("fac").toString());
+                parameters.put("whs",  request.getParameter("whs").toString());
+                parameters.put("mono", request.getParameter("mono").toString());
+                parameters.put("username", session.getAttribute("user").toString());
+                parameters.put("com", session.getAttribute("cono").toString());
+                
+
+                
+
+                try {
+
+                    System.out.println(path + "MO_Report_Excel.jrxml");
+                    JasperReport jasperReport = JasperCompileManager.compileReport(path + "MPM001_Excel.jrxml");
+                    JasperReport subjasperReport1 = JasperCompileManager.compileReport(path + "sub_mpm001_1.jrxml");
+                    JasperReport subjasperReport2 = JasperCompileManager.compileReport(path + "sub2.jrxml");
+                    JasperReport subjasperReport3 = JasperCompileManager.compileReport(path + "sub3.jrxml");
+
+                    parameters.put("SUBREPORT_DIR1", subjasperReport1);
+                    parameters.put("SUBREPORT_DIR2", subjasperReport2);
+                    parameters.put("SUBREPORT_DIR3", subjasperReport3);
+
+                    try {
+                        conn = ConnectDB2.ConnectionDB();
+                    } catch (Exception ex) {
+                        Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    JasperPrint jasp = JasperFillManager.fillReport(jasperReport, parameters, conn);
+                    response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                    response.setHeader("Content-Disposition", "attachment; filename=\"" + "MPM001rxml_Excel" + ".xlsx" + "\"");
+                    JRXlsxExporter exporterXls = new JRXlsxExporter();
+                    ServletOutputStream ouputStream = response.getOutputStream();
+                    exporterXls.setParameter(JRExporterParameter.JASPER_PRINT, jasp);
+                    exporterXls.setParameter(JRExporterParameter.OUTPUT_STREAM, ouputStream);
+                    exporterXls.exportReport();
+                    ouputStream.flush();
+                    ouputStream.close();
+
+                } catch (Exception ex) {
+                    Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } 
+            //////
+            else if (request.getParameter("report").contentEquals("MO_Report")) {
 
                 System.out.println("Mo mo    PDF ____________________________");
                 conn = ConnectDB2.ConnectionDB();
@@ -123,7 +229,9 @@ public class Report extends HttpServlet {
                     Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
-            } else if (request.getParameter("report").contentEquals("MO_Report_Excel")) {
+            } 
+            
+            else if (request.getParameter("report").contentEquals("MO_Report_Excel")) {
                 String path = getServletContext().getRealPath("/jaspers/");
                 Map parameters = new HashMap();
                 parameters.put("cono", session.getAttribute("cono"));
@@ -165,6 +273,376 @@ public class Report extends HttpServlet {
                     Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } 
+            
+            
+            //////////////////////////  whs005  ////////////////////////////////////////////////
+            
+            
+            else if (request.getParameter("report").contentEquals("WHS005")) {
+
+                System.out.println("WHS005  _______________");
+
+               String whs = request.getParameter("whs").toString();
+                String  com = session.getAttribute("cono").toString(); 
+                String username = session.getAttribute("user").toString() ;
+                String fdate = request.getParameter("fdate").toString().replaceAll("-", "");
+                String tdate = request.getParameter("tdate").toString().replaceAll("-", "");
+
+
+                conn = ConnectDB2.ConnectionDB();
+                String path = getServletContext().getRealPath("/jaspers/");
+                Map parameters = new HashMap();
+
+                parameters.put("whs", whs);
+                parameters.put("username", username);
+                parameters.put("com", com);
+                parameters.put("fdate", fdate);
+                parameters.put("tdate", tdate);
+
+
+                
+
+                try {
+
+                    OutputStream outStream = response.getOutputStream();
+                    System.out.println(path + "WHS005.jrxml");
+                    JasperReport jasperReport = JasperCompileManager.compileReport(path + "WHS005.jrxml");
+
+                    JasperPrint jasp = JasperFillManager.fillReport(jasperReport, parameters, conn);
+                    JasperExportManager.exportReportToPdfStream(jasp, outStream);
+
+                } catch (Exception ex) {
+                    Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                                System.out.println("-00099999    PDF ____________________________");
+
+
+            }
+            
+            
+            else if (request.getParameter("report").contentEquals("WHS005_Excel")) {
+
+
+                String whs = request.getParameter("whs").toString();
+                String  com = session.getAttribute("cono").toString(); 
+                String username = session.getAttribute("user").toString() ;
+                String fdate = request.getParameter("fdate").toString().replaceAll("-", "");
+                String tdate = request.getParameter("tdate").toString().replaceAll("-", "");
+                
+                conn = ConnectDB2.ConnectionDB();
+                String path = getServletContext().getRealPath("/jaspers/");
+//                System.out.println("path: " + path);
+                Map parameters = new HashMap();
+
+                parameters.put("whs", whs);
+                parameters.put("username", username);
+                parameters.put("com", com);
+                parameters.put("fdate", fdate);
+                parameters.put("tdate", tdate);
+
+                JasperDesign JPD;
+                try {
+                    JPD = JRXmlLoader.load(path + "WHS005_Excel.jrxml");
+                    JasperReport jasperReport = JasperCompileManager.compileReport(JPD);
+
+                    try {
+                        conn = ConnectDB2.ConnectionDB();
+                    } catch (Exception ex) {
+                        Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    JasperPrint jasp = JasperFillManager.fillReport(jasperReport, parameters, conn);
+                    response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                    response.setHeader("Content-Disposition", "attachment; filename=\"" + "WHS005_Excel" + ".xlsx" + "\"");
+                    JRXlsxExporter exporterXls = new JRXlsxExporter();
+                    ServletOutputStream ouputStream = response.getOutputStream();
+                    exporterXls.setParameter(JRExporterParameter.JASPER_PRINT, jasp);
+                    exporterXls.setParameter(JRExporterParameter.OUTPUT_STREAM, ouputStream);
+                    exporterXls.exportReport();
+                    ouputStream.flush();
+                    ouputStream.close();
+
+                } catch (Exception ex) {
+                    Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+
+            
+            
+            ////////////////////////////////////////////////////////////////////////////////////////
+            
+            
+            
+            
+            else if (request.getParameter("report").contentEquals("WHS021")) {
+
+                System.out.println("WHS021   PDF _______12______65_______________");
+                String whs = request.getParameter("whs").toString();
+                String lot = request.getParameter("vLotN").toString();
+                String  com = session.getAttribute("cono").toString(); 
+                String username = session.getAttribute("user").toString() ;
+//                
+//                String[] getwarehouse = request.getParameter("whs").split(" : ");
+//                whs = getwarehouse[0];
+
+                //System.out.println(lot + " : " + whs);
+
+                conn = ConnectDB2.ConnectionDB();
+                String path = getServletContext().getRealPath("/jaspers/");
+                Map parameters = new HashMap();
+
+//                parameters.put("lot", "1456277");
+//                parameters.put("whs", "A41");
+//                parameters.put("username", "PPppp");
+//                parameters.put("com", "10");
+
+                parameters.put("lot", lot);
+                parameters.put("whs", whs);
+                parameters.put("username", username);
+                parameters.put("com", com);
+
+                
+
+                try {
+
+                    OutputStream outStream = response.getOutputStream();
+                    System.out.println(path + "WHS021.jrxml");
+                    JasperReport jasperReport = JasperCompileManager.compileReport(path + "WHS021.jrxml");
+
+                    JasperPrint jasp = JasperFillManager.fillReport(jasperReport, parameters, conn);
+                    JasperExportManager.exportReportToPdfStream(jasp, outStream);
+
+                } catch (Exception ex) {
+                    Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+            
+            
+            else if (request.getParameter("report").contentEquals("WHS021_Excel")) {
+
+
+                String whs = request.getParameter("whs").toString();
+                String lot = request.getParameter("vLotN").toString();
+                String  com = session.getAttribute("cono").toString(); 
+                String username = session.getAttribute("user").toString() ;
+                
+                conn = ConnectDB2.ConnectionDB();
+                String path = getServletContext().getRealPath("/jaspers/");
+//                System.out.println("path: " + path);
+                Map parameters = new HashMap();
+
+                parameters.put("lot", lot);
+                parameters.put("whs", whs);
+                parameters.put("username", username);
+                parameters.put("com", com);
+
+                JasperDesign JPD;
+                try {
+                    JPD = JRXmlLoader.load(path + "WHS021_Excel.jrxml");
+                    JasperReport jasperReport = JasperCompileManager.compileReport(JPD);
+
+                    try {
+                        conn = ConnectDB2.ConnectionDB();
+                    } catch (Exception ex) {
+                        Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    JasperPrint jasp = JasperFillManager.fillReport(jasperReport, parameters, conn);
+                    response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                    response.setHeader("Content-Disposition", "attachment; filename=\"" + "WHS021_Excel" + ".xlsx" + "\"");
+                    JRXlsxExporter exporterXls = new JRXlsxExporter();
+                    ServletOutputStream ouputStream = response.getOutputStream();
+                    exporterXls.setParameter(JRExporterParameter.JASPER_PRINT, jasp);
+                    exporterXls.setParameter(JRExporterParameter.OUTPUT_STREAM, ouputStream);
+                    exporterXls.exportReport();
+                    ouputStream.flush();
+                    ouputStream.close();
+
+                } catch (Exception ex) {
+                    Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            //////////////////////////////////////////////////////////////////
+            
+             else if (request.getParameter("report").contentEquals("WHS021R")) {
+
+                System.out.println("WHS021R   PDF ____________________________");
+                String whs = request.getParameter("whs").toString();
+                String lot = request.getParameter("lot").toString();
+                String  com = session.getAttribute("cono").toString(); 
+                String username = session.getAttribute("user").toString() ;
+//                
+//                String[] getwarehouse = request.getParameter("whs").split(" : ");
+//                whs = getwarehouse[0];
+
+                //System.out.println(lot + " : " + whs);
+
+                conn = ConnectDB2.ConnectionDB();
+                String path = getServletContext().getRealPath("/jaspers/");
+                Map parameters = new HashMap();
+
+//                parameters.put("lot", "1456277");
+//                parameters.put("whs", "A41");
+//                parameters.put("username", "PPppp");
+//                parameters.put("com", "10");
+
+                parameters.put("lot", lot);
+                parameters.put("whs", whs);
+                parameters.put("username", username);
+                parameters.put("com", com);
+
+                
+
+                try {
+
+                    OutputStream outStream = response.getOutputStream();
+                    System.out.println(path + "WHS021R.jrxml");
+                    JasperReport jasperReport = JasperCompileManager.compileReport(path + "WHS021R.jrxml");
+
+                    JasperPrint jasp = JasperFillManager.fillReport(jasperReport, parameters, conn);
+                    JasperExportManager.exportReportToPdfStream(jasp, outStream);
+
+                } catch (Exception ex) {
+                    Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+            
+               else if (request.getParameter("report").contentEquals("WHS021R_Excel")) {
+
+
+                String whs = request.getParameter("whs").toString();
+                String lot = request.getParameter("lot").toString();
+                String  com = session.getAttribute("cono").toString(); 
+                String username = session.getAttribute("user").toString() ;
+                
+                conn = ConnectDB2.ConnectionDB();
+                String path = getServletContext().getRealPath("/jaspers/");
+//                System.out.println("path: " + path);
+                Map parameters = new HashMap();
+
+                parameters.put("lot", lot);
+                parameters.put("whs", whs);
+                parameters.put("username", username);
+                parameters.put("com", com);
+
+                JasperDesign JPD;
+                try {
+                    JPD = JRXmlLoader.load(path + "WHS021R_Excel.jrxml");
+                    JasperReport jasperReport = JasperCompileManager.compileReport(JPD);
+
+                    try {
+                        conn = ConnectDB2.ConnectionDB();
+                    } catch (Exception ex) {
+                        Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    JasperPrint jasp = JasperFillManager.fillReport(jasperReport, parameters, conn);
+                    response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                    response.setHeader("Content-Disposition", "attachment; filename=\"" + "WHS021R_Excel" + ".xlsx" + "\"");
+                    JRXlsxExporter exporterXls = new JRXlsxExporter();
+                    ServletOutputStream ouputStream = response.getOutputStream();
+                    exporterXls.setParameter(JRExporterParameter.JASPER_PRINT, jasp);
+                    exporterXls.setParameter(JRExporterParameter.OUTPUT_STREAM, ouputStream);
+                    exporterXls.exportReport();
+                    ouputStream.flush();
+                    ouputStream.close();
+
+                } catch (Exception ex) {
+                    Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            
+            else if (request.getParameter("report").contentEquals("WHS027")) {
+
+                System.out.println("WHS027   PDF ____________________________");
+                String whs = request.getParameter("whs").toString();
+                String lot = request.getParameter("lot").toString();
+                String  com = session.getAttribute("cono").toString(); 
+                String username = session.getAttribute("user").toString() ;
+
+
+                conn = ConnectDB2.ConnectionDB();
+                String path = getServletContext().getRealPath("/jaspers/");
+                Map parameters = new HashMap();
+
+
+                parameters.put("lot", lot);
+                parameters.put("whs", whs);
+                parameters.put("username", username);
+                parameters.put("com", com);
+
+
+//                parameters.put("lot", "1465182");
+//                parameters.put("whs", "A1G");
+//                parameters.put("username", "PPppp");
+//                parameters.put("com", "10");
+
+                
+
+                try {
+
+                    OutputStream outStream = response.getOutputStream();
+                    System.out.println(path + "WHS027.jrxml");
+                    JasperReport jasperReport = JasperCompileManager.compileReport(path + "WHS027.jrxml");
+
+                    JasperPrint jasp = JasperFillManager.fillReport(jasperReport, parameters, conn);
+                    JasperExportManager.exportReportToPdfStream(jasp, outStream);
+
+                } catch (Exception ex) {
+                    Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+            
+             else if (request.getParameter("report").contentEquals("WHS027_Excel")) {
+
+
+                String whs = request.getParameter("whs").toString();
+                String lot = request.getParameter("lot").toString();
+                String  com = session.getAttribute("cono").toString(); 
+                String username = session.getAttribute("user").toString() ;
+                
+                conn = ConnectDB2.ConnectionDB();
+                String path = getServletContext().getRealPath("/jaspers/");
+//                System.out.println("path: " + path);
+                Map parameters = new HashMap();
+
+                parameters.put("lot", lot);
+                parameters.put("whs", whs);
+                parameters.put("username", username);
+                parameters.put("com", com);
+
+                JasperDesign JPD;
+                try {
+                    JPD = JRXmlLoader.load(path + "WHS027_ExcelPP.jrxml");
+                    JasperReport jasperReport = JasperCompileManager.compileReport(JPD);
+
+                    try {
+                        conn = ConnectDB2.ConnectionDB();
+                    } catch (Exception ex) {
+                        Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    JasperPrint jasp = JasperFillManager.fillReport(jasperReport, parameters, conn);
+                    response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                    response.setHeader("Content-Disposition", "attachment; filename=\"" + "WHS027_ExcelPP" + ".xlsx" + "\"");
+                    JRXlsxExporter exporterXls = new JRXlsxExporter();
+                    ServletOutputStream ouputStream = response.getOutputStream();
+                    exporterXls.setParameter(JRExporterParameter.JASPER_PRINT, jasp);
+                    exporterXls.setParameter(JRExporterParameter.OUTPUT_STREAM, ouputStream);
+                    exporterXls.exportReport();
+                    ouputStream.flush();
+                    ouputStream.close();
+
+                } catch (Exception ex) {
+                    Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
 
             /////////////////////// MPM012 ///////////////////////////////////
             
@@ -176,18 +654,20 @@ public class Report extends HttpServlet {
                 String tdate = request.getParameter("tdate").toString().replaceAll("-", "");
                 String warehouse = request.getParameter("warehouse").toString();
                 String company = session.getAttribute("cono").toString();
-                String  username  =  session.getAttribute("user").toString() ;
+              
+
+                
 //                String[] getCompany = request.getParameter("company").split(" : ");
 //                company = getCompany[0];
 
-                System.out.println(fdate + " : " + tdate + " : " + warehouse + " : " + company + " : "+ username);
+                System.out.println(fdate + " : " + tdate + " : " + warehouse + " : " + company + " : ");
 
                 conn = ConnectDB2.ConnectionDB();
                 String path = getServletContext().getRealPath("/jaspers/");
 //                System.out.println("path: " + path);
                 Map parameters = new HashMap();
 
-                parameters.put("username", session.getAttribute("username"));
+                parameters.put("username", session.getAttribute("user"));
                 parameters.put("fdate", fdate);
                 parameters.put("tdate", tdate);
                 parameters.put("whs", warehouse);
@@ -213,18 +693,18 @@ public class Report extends HttpServlet {
                 String tdate = request.getParameter("tdate").toString().replaceAll("-", "");
                 String warehouse = request.getParameter("warehouse").toString();
                 String company = session.getAttribute("cono").toString();
-                String  username  =  session.getAttribute("user").toString() ;
+
 //                String[] getCompany = request.getParameter("company").split(" : ");
 //                company = getCompany[0];
 
-                System.out.println(fdate + " : " + tdate + " : " + warehouse + " : " + company + " : "+ username);
+                System.out.println(fdate + " : " + tdate + " : " + warehouse + " : " + company + " : ");
 
                 conn = ConnectDB2.ConnectionDB();
                 String path = getServletContext().getRealPath("/jaspers/");
 //                System.out.println("path: " + path);
                 Map parameters = new HashMap();
 
-                parameters.put("username", session.getAttribute("username"));
+                parameters.put("username", session.getAttribute("user"));
                 parameters.put("fdate", fdate);
                 parameters.put("tdate", tdate);
                 parameters.put("whs", warehouse);
@@ -276,10 +756,12 @@ public class Report extends HttpServlet {
                 parameters.put("Fac", fac);
                 parameters.put("Mono", mo);
                 parameters.put("Company", company);
+                parameters.put("username", session.getAttribute("user"));
                 
 //                parameters.put("Fac", "1A1");
 //                parameters.put("Mono", "0012161088");
 //                parameters.put("Company", "10");
+
 
 
                 try {
@@ -300,6 +782,8 @@ public class Report extends HttpServlet {
                     parameters.put("SUBREPORT_DIR1", sub_report1);
                     parameters.put("SUBREPORT_DIR2", sub_report2);
                     parameters.put("SUBREPORT_DIR3", sub_report3);
+                    
+                    
 //
 //                    
 //
@@ -332,6 +816,7 @@ public class Report extends HttpServlet {
                 parameters.put("Fac", fac);
                 parameters.put("Mono", mo);
                 parameters.put("Company", company);
+                parameters.put("username", session.getAttribute("user"));
                 
                     JasperReport sub_report1 = JasperCompileManager.compileReport(path + "sub_report.jrxml");
                     JasperReport sub_report2 = JasperCompileManager.compileReport(path + "sub_report2.jrxml");
@@ -373,6 +858,10 @@ public class Report extends HttpServlet {
                 System.out.println("MPM029   PDF ____________________________");
                 String fdate = request.getParameter("fdate").toString().replaceAll("-", "");
                 String whs = request.getParameter("whs").toString();
+                    System.out.println(fdate);
+                        System.out.println(whs);
+                
+
                 String[] getwarehouse = request.getParameter("whs").split(" : ");
                 whs = getwarehouse[0];
 
@@ -384,15 +873,30 @@ public class Report extends HttpServlet {
 
 //                parameters.put("fdate", "20160104");
 //                parameters.put("whs", "A31");
+
+                    JasperReport sub_report1 = JasperCompileManager.compileReport(path + "header.jrxml");
+                    JasperReport sub_report2 = JasperCompileManager.compileReport(path + "Sum_all_total.jrxml");
+                    JasperReport sub_report3 = JasperCompileManager.compileReport(path + "in_mpm029.jrxml"); 
+                    JasperReport sub_report4 = JasperCompileManager.compileReport(path + "out_mpm029.jrxml"); 
+//
+                    parameters.put("SUBREPORT_DIR_Head", sub_report1);
+                    parameters.put("SUBREPORT_DIR_Total", sub_report2);
+                    parameters.put("SUBREPORT_DIR_in", sub_report3);
+                    parameters.put("SUBREPORT_DIR_out", sub_report4);
+
+
+                    
+                    
                 parameters.put("fdate", fdate);
                 parameters.put("whs", whs);
+                parameters.put("com", session.getAttribute("cono"));
                 
 
                 try {
 
                     OutputStream outStream = response.getOutputStream();
                     System.out.println(path + "MPM029.jrxml");
-                    JasperReport jasperReport = JasperCompileManager.compileReport(path + "MPM02911.jrxml");
+                    JasperReport jasperReport = JasperCompileManager.compileReport(path + "MPM029_Main.jrxml");
 
                     JasperPrint jasp = JasperFillManager.fillReport(jasperReport, parameters, conn);
                     JasperExportManager.exportReportToPdfStream(jasp, outStream);
@@ -416,13 +920,27 @@ public class Report extends HttpServlet {
 //                System.out.println("path: " + path);
                 Map parameters = new HashMap();
 
+                    JasperReport sub_report1 = JasperCompileManager.compileReport(path + "header.jrxml");
+                    JasperReport sub_report2 = JasperCompileManager.compileReport(path + "Sum_all_total.jrxml");
+                    JasperReport sub_report3 = JasperCompileManager.compileReport(path + "in_mpm029.jrxml"); 
+                    JasperReport sub_report4 = JasperCompileManager.compileReport(path + "out_mpm029.jrxml"); 
+//
+                    parameters.put("SUBREPORT_DIR_Head", sub_report1);
+                    parameters.put("SUBREPORT_DIR_Total", sub_report2);
+                    parameters.put("SUBREPORT_DIR_in", sub_report3);
+                    parameters.put("SUBREPORT_DIR_out", sub_report4);
+                    
                 parameters.put("fdate", fdate);
                 parameters.put("whs", whs);
+                parameters.put("com", session.getAttribute("cono"));
+
 
 
                 JasperDesign JPD;
                 try {
-                    JPD = JRXmlLoader.load(path + "MPM02911_Excel.jrxml");
+                   
+
+                    JPD = JRXmlLoader.load(path + "MPM029_Main_Excel.jrxml");
                     JasperReport jasperReport = JasperCompileManager.compileReport(JPD);
 
                     try {
@@ -542,6 +1060,7 @@ public class Report extends HttpServlet {
                     Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+            
 
         } catch (Exception ex) {
             Logger.getLogger(Report.class.getName()).log(Level.SEVERE, null, ex);

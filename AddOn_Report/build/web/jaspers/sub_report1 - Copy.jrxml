@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sub_report1" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="678381f4-448a-451a-a086-18462cabc5fd">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="M3OLD"/>
+	<parameter name="Company" class="java.lang.String"/>
+	<parameter name="Fac" class="java.lang.String"/>
+	<parameter name="Mono" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT  * 
+
+FROM (
+select vhcono,vhfaci,vhorty,vhfstd,vhprno,mmfuds,vhmfno,phexpc,vhwhst
+from mwohed,mitmas,mpdhed
+where vhfaci = $P{Fac}
+  and vhmfno = $P{Mono}
+  and  vhfaci = phfaci
+  and  vhprno = phprno
+  and vhprno = mmitno
+  and vhcono = $P{Company}
+  and vhcono = phcono
+  and vhcono = mmcono
+order by vhcono,vhfaci,vhorty,vhfstd,vhprno,vhmfno
+
+
+)  AS q1
+LEFT JOIN  
+(
+
+select mtridn,mtttyp,mtitno,mmfuds,mmunms,mtbano,
+           sum(mttrqt) rm_qty,
+           sum(mttrpr*mttrqt*-1.00) amt,sum(mtcawe)  pcs
+from mittra,mitmas
+where  mtttyp = 11
+     and mtcono = mmcono
+     and mtitno = mmitno
+     and mtcono = $P{Company}
+group by mtridn,mtttyp,mtitno,mmfuds,mmunms,mtbano
+order by mtitno,mtbano
+
+)  AS q2
+
+ON 
+    q1.vhmfno = q2.mtridn
+    
+    
+LEFT  JOIN  
+(
+select mtttyp mtttyp3,mtprmf,mtbano mtbano2,
+           sum(mttrqt) rm_qty1,
+           sum(mttrpr*mttrqt) amt1,sum(mtcawe)  pcs2
+from mittra,mitmas
+where mtttyp = 10
+     and mtcono = mmcono
+     and mtitno = mmitno
+     and  mtcono = $P{Company}
+group by mtttyp,mtprmf,mtbano
+order by mtbano2
+
+
+) AS q3
+
+ON  q1.vhmfno = q3.mtprmf
+
+LEFT  JOIN
+
+(
+
+select mtridn mtridn3,mtttyp mtttyp1,mtbano mtbano3,
+           sum(mttrqt) rm_qty4,
+           sum(mttrpr*mttrqt) amt4,sum(mtcawe) pcs3
+from mittra,mitmas
+where  mtttyp = 13
+     and mtcono = mmcono
+     and mtitno = mmitno
+     and mtcono =  $P{Company}
+group by mtridn,mtttyp,mtbano
+order by mtbano3
+
+
+) AS q
+ON  q1.vhmfno = q.mtridn3]]>
+	</queryString>
+	<field name="VHCONO" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="VHCONO"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHCONO"/>
+	</field>
+	<field name="VHFACI" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VHFACI"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHFACI"/>
+	</field>
+	<field name="VHORTY" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VHORTY"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHORTY"/>
+	</field>
+	<field name="VHFSTD" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="VHFSTD"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHFSTD"/>
+	</field>
+	<field name="VHPRNO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VHPRNO"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHPRNO"/>
+	</field>
+	<field name="MMFUDS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MMFUDS"/>
+		<property name="com.jaspersoft.studio.field.label" value="MMFUDS"/>
+	</field>
+	<field name="VHMFNO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VHMFNO"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHMFNO"/>
+	</field>
+	<field name="PHEXPC" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="PHEXPC"/>
+		<property name="com.jaspersoft.studio.field.label" value="PHEXPC"/>
+	</field>
+	<field name="VHWHST" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VHWHST"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHWHST"/>
+	</field>
+	<field name="MTRIDN" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTRIDN"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTRIDN"/>
+	</field>
+	<field name="MTTTYP" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="MTTTYP"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTTTYP"/>
+	</field>
+	<field name="MTITNO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTITNO"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTITNO"/>
+	</field>
+	<field name="COLUMN_13" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MMFUDS"/>
+		<property name="com.jaspersoft.studio.field.label" value="MMFUDS"/>
+	</field>
+	<field name="MMUNMS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MMUNMS"/>
+		<property name="com.jaspersoft.studio.field.label" value="MMUNMS"/>
+	</field>
+	<field name="MTBANO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTBANO"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTBANO"/>
+	</field>
+	<field name="RM_QTY" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="RM_QTY"/>
+		<property name="com.jaspersoft.studio.field.label" value="RM_QTY"/>
+	</field>
+	<field name="AMT" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="AMT"/>
+		<property name="com.jaspersoft.studio.field.label" value="AMT"/>
+	</field>
+	<field name="PCS" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="PCS"/>
+		<property name="com.jaspersoft.studio.field.label" value="PCS"/>
+	</field>
+	<field name="MTTTYP3" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="MTTTYP3"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTTTYP3"/>
+	</field>
+	<field name="MTPRMF" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTPRMF"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTPRMF"/>
+	</field>
+	<field name="MTBANO2" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTBANO2"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTBANO2"/>
+	</field>
+	<field name="RM_QTY1" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="RM_QTY1"/>
+		<property name="com.jaspersoft.studio.field.label" value="RM_QTY1"/>
+	</field>
+	<field name="AMT1" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="AMT1"/>
+		<property name="com.jaspersoft.studio.field.label" value="AMT1"/>
+	</field>
+	<field name="PCS2" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="PCS2"/>
+		<property name="com.jaspersoft.studio.field.label" value="PCS2"/>
+	</field>
+	<field name="MTRIDN3" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTRIDN3"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTRIDN3"/>
+	</field>
+	<field name="MTTTYP1" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="MTTTYP1"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTTTYP1"/>
+	</field>
+	<field name="MTBANO3" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTBANO3"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTBANO3"/>
+	</field>
+	<field name="RM_QTY4" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="RM_QTY4"/>
+		<property name="com.jaspersoft.studio.field.label" value="RM_QTY4"/>
+	</field>
+	<field name="AMT4" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="AMT4"/>
+		<property name="com.jaspersoft.studio.field.label" value="AMT4"/>
+	</field>
+	<field name="PCS3" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="PCS3"/>
+		<property name="com.jaspersoft.studio.field.label" value="PCS3"/>
+	</field>
+	<variable name="Sum_Qty" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{RM_QTY}]]></variableExpression>
+	</variable>
+	<variable name="Sum_PCS" class="java.math.BigDecimal" calculation="Sum">
+		<variableDescription><![CDATA[Sum_PCS]]></variableDescription>
+		<variableExpression><![CDATA[$F{PCS}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="50" splitType="Stretch">
+			<staticText>
+				<reportElement x="80" y="30" width="190" height="20" forecolor="#141AFF" uuid="914736f0-ff3c-4ef5-9c8b-055a05a0e070"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="270" y="30" width="30" height="20" forecolor="#141AFF" uuid="46c1998e-93ef-41f0-a61c-19ced5452dd2"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Unit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="30" width="40" height="20" forecolor="#141AFF" uuid="62cfcc82-4f86-4541-98d5-2b70c3d1281a"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lot]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="340" y="30" width="40" height="20" forecolor="#141AFF" uuid="22d13d28-ab1b-4d35-8e81-8713ad4b0895"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="420" y="30" width="60" height="20" forecolor="#141AFF" uuid="c370f8c6-bcd2-41f1-8417-1418792f5ea0"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Avg. PCS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="30" width="40" height="20" forecolor="#141AFF" uuid="05fb82ed-1554-4269-9c91-54c8d61bcf20"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PCS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="30" width="80" height="20" forecolor="#141AFF" uuid="0ec2106e-4f44-493e-999e-9d2538eac5f6"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Material ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="40" y="0" width="40" height="30" forecolor="#A42084" uuid="7cc760f0-75c4-4f83-9979-d6a481cc33da"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MTTTYP}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="40" height="30" forecolor="#A42084" uuid="af5c4daf-7bec-4e77-8314-5dd2c6b36e92"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Type]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField pattern="#,###.##">
+				<reportElement x="380" y="0" width="40" height="20" forecolor="#141AFF" uuid="e57c4d06-9a53-4dab-b60c-b4c05449ca32"/>
+				<textFieldExpression><![CDATA[$F{PCS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,###.##">
+				<reportElement x="340" y="0" width="40" height="20" forecolor="#141AFF" uuid="acf57825-ea4f-4d21-a3b3-33b651366c73"/>
+				<textFieldExpression><![CDATA[$F{RM_QTY}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="300" y="0" width="40" height="20" forecolor="#141AFF" uuid="232a715b-b834-4d96-916c-ce8efb1144b4"/>
+				<textFieldExpression><![CDATA[$F{MTBANO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="270" y="0" width="30" height="20" forecolor="#141AFF" uuid="e01fbf3d-b7e1-4b7f-99c2-f787522e7c38"/>
+				<textFieldExpression><![CDATA[$F{MMUNMS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="0" width="190" height="20" forecolor="#141AFF" uuid="178534da-b0c5-45a8-bfba-b34fc4313a39"/>
+				<textFieldExpression><![CDATA[$F{MMFUDS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="80" height="20" forecolor="#141AFF" uuid="e5ad8d43-c237-4f20-9564-8e75c68a182a"/>
+				<textFieldExpression><![CDATA[$F{MTITNO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="340" height="20" forecolor="#A42084" uuid="a19199da-549e-4b6d-9b25-b2442e2445f6"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<textField pattern="#,###.##">
+				<reportElement x="380" y="0" width="40" height="20" forecolor="#810101" uuid="ba535404-b2c8-481c-a823-4966895252ac"/>
+				<textElement>
+					<font isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Sum_PCS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="340" y="0" width="40" height="20" forecolor="#810101" uuid="3773f5cd-7b67-45ce-95dc-bd8e6175934a"/>
+				<textFieldExpression><![CDATA[$V{Sum_Qty}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

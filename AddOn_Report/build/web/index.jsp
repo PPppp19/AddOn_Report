@@ -90,17 +90,22 @@
 
                             <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="./">MPM Report&nbsp;<span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li role="presentation"><a class='dropdown-item' name="mo_production" href="?report=mo_production">MPM001</a></li>
+                                    <li role="presentation"><a class='dropdown-item' name="MPM001" href="?report=MPM001">MPM001</a></li>
                                     <li role="presentation"><a class='dropdown-item' name="MPM012" href="?report=MPM012">MPM012</a></li>
                                     <li role="presentation"><a class='dropdown-item' name="MPM024" href="?report=MPM024">MPM024</a></li>
                                     <li role="presentation"><a class='dropdown-item' name="MPM029" href="?report=MPM029">MPM029</a></li>
+                                    <li role="presentation"><a class='dropdown-item' name="mo_production" href="?report=mo_production">mo_production</a></li>
                                     <li role="presentation"><a class='dropdown-item' name="sum_mo_production" href="?report=sum_mo_production">Summary MO Production</a></li>
                                     <li role="presentation"><a class='dropdown-item' name="sum_modetail_production" href="?report=sum_modetail_production">Summary MO Detail Production</a></li>
                                 </ul>
                             </li>
-                            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="./">WAREHOUSE Report&nbsp;<span class="caret"></span></a>
+                            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="./">WHS Report&nbsp;<span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
+                                    <li role="presentation"><a class='dropdown-item' name="WHS005" href="?report=WHS005">WHS005</a></li>
                                     <li role="presentation"><a class='dropdown-item' name="WHS021" href="?report=WHS021">WHS021</a></li>
+                                    <li role="presentation"><a class='dropdown-item' name="WHS021R" href="?report=WHS021R">WHS021R</a></li>
+                                    <li role="presentation"><a class='dropdown-item' name="WHS027" href="?report=WHS027">WHS027</a></li>
+
                                 </ul>
                             </li>
 

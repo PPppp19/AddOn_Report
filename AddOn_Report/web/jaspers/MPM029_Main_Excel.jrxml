@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MPM029_Main" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="fa4c1377-fffd-4ee9-ba09-ffbe87a0de5e">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="M3OLD"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="net.sf.jasperreports.text.truncate.at.char" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
+	<property name="net.sf.jasperreports.export.xls.ignore.cell.background" value="false"/>
+	<parameter name="whs" class="java.lang.String"/>
+	<parameter name="fdate" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR_Head" class="net.sf.jasperreports.engine.JasperReport"/>
+	<parameter name="SUBREPORT_DIR_Total" class="net.sf.jasperreports.engine.JasperReport"/>
+	<parameter name="SUBREPORT_DIR_in" class="net.sf.jasperreports.engine.JasperReport"/>
+	<parameter name="SUBREPORT_DIR_out" class="net.sf.jasperreports.engine.JasperReport"/>
+	<parameter name="com" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select *  
+
+from (
+select vhmfno,vhcono
+from mwohed,mitmas,mpdhed
+where vhstdt = $P{fdate}
+  AND vhcono = $P{com}
+  and vhwhlo  = $P{whs}
+  and vhfaci = phfaci
+  and vhprno = phprno
+  and vhprno = mmitno
+  and (substr(vhprno,12,1) = '2' or substr(vhprno,11,2) = '01' )
+order by vhwhlo,vhfstd,vhmfno
+) as a  
+
+left join (
+	
+SELECT ROW_NUMBER() OVER(ORDER BY CCCONO) AS ID, CCCONO, CCDIVI, CCCONM, CCROW3, TRIM(CCCONO) || ' : ' || TRIM(CCDIVI) || ' : ' || TRIM(CCROW3)  AS COMPANY
+FROM M3FDBPRD.CMNDIV
+WHERE CCDIVI != ' '
+AND CCCONO  = $P{com}
+	
+) as b 
+on b.cccono = a.vhcono]]>
+	</queryString>
+	<field name="VHMFNO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VHMFNO"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHMFNO"/>
+	</field>
+	<field name="VHCONO" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="VHCONO"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHCONO"/>
+	</field>
+	<field name="ID" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="ID"/>
+		<property name="com.jaspersoft.studio.field.label" value="ID"/>
+	</field>
+	<field name="CCCONO" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="CCCONO"/>
+		<property name="com.jaspersoft.studio.field.label" value="CCCONO"/>
+	</field>
+	<field name="CCDIVI" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CCDIVI"/>
+		<property name="com.jaspersoft.studio.field.label" value="CCDIVI"/>
+	</field>
+	<field name="CCCONM" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CCCONM"/>
+		<property name="com.jaspersoft.studio.field.label" value="CCCONM"/>
+	</field>
+	<field name="CCROW3" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CCROW3"/>
+		<property name="com.jaspersoft.studio.field.label" value="CCROW3"/>
+	</field>
+	<field name="COMPANY" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="COMPANY"/>
+		<property name="com.jaspersoft.studio.field.label" value="COMPANY"/>
+	</field>
+	<variable name="MO" class="java.lang.String"/>
+	<variable name="Sum_in" class="java.math.BigDecimal" calculation="Sum"/>
+	<variable name="Sum_in2" class="java.math.BigDecimal" calculation="Sum"/>
+	<variable name="Sun_out" class="java.math.BigDecimal" calculation="Sum"/>
+	<variable name="Sum_out2" class="java.math.BigDecimal" calculation="Sum"/>
+	<group name="Group1">
+		<groupExpression><![CDATA[$F{VHMFNO}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="86" splitType="Stretch">
+			<staticText>
+				<reportElement x="155" y="20" width="248" height="20" uuid="2c1ee9ef-a525-4454-b971-24c06b6edee7">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[In put & Out Put Freeze,CTN]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="206" y="40" width="197" height="20" uuid="75a100f1-a513-445e-be93-1aa5d8b3fd01">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Warehouse: "+$P{whs}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="505" y="20" width="70" height="20" forecolor="#030303" uuid="0f4188d3-83fd-4ba2-87ff-192fea87caf2">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page" + $V{PAGE_NUMBER} + " of "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="206" y="60" width="197" height="20" uuid="66e5492d-f557-4bfc-a69f-c01de6fd2518">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Date: " +$P{fdate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="155" y="0" width="248" height="20" uuid="13fa650f-c929-4ac4-9c29-28b37e55fd23">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CCCONM} ]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20">
+			<subreport>
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="577" height="20" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" uuid="7375d911-b6f6-4ec9-9064-5bb98b2ca7e3">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} ==1]]></printWhenExpression>
+				</reportElement>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR_Head}]]></subreportExpression>
+			</subreport>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<subreport>
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="403" height="20" printWhenGroupChanges="Group1" uuid="edc75bd1-9817-490d-952e-199098d22266">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<subreportParameter name="mono">
+					<subreportParameterExpression><![CDATA[$F{VHMFNO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="whs">
+					<subreportParameterExpression><![CDATA[$P{whs}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="fdate">
+					<subreportParameterExpression><![CDATA[$P{fdate}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="com">
+					<subreportParameterExpression><![CDATA[$P{com}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<returnValue subreportVariable="Sum_total" toVariable="Sum_in" calculation="Sum"/>
+				<returnValue subreportVariable="Sum_total2" toVariable="Sum_in2" calculation="Sum"/>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR_in}]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement x="403" y="0" width="174" height="20" uuid="12e16386-a609-4c94-b801-9fcd34764c19">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<subreportParameter name="mono">
+					<subreportParameterExpression><![CDATA[$F{VHMFNO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="whs">
+					<subreportParameterExpression><![CDATA[$P{whs}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="fdate">
+					<subreportParameterExpression><![CDATA[$P{fdate}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="com">
+					<subreportParameterExpression><![CDATA[$P{com}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<returnValue subreportVariable="Sum_out" toVariable="Sun_out" calculation="Sum"/>
+				<returnValue subreportVariable="Sum_pcs2" toVariable="Sum_out2" calculation="Sum"/>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR_out}]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<summary>
+		<band height="20" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="577" height="20" uuid="a92fb41a-0250-43ec-b539-47b25a6fc9ef">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<subreportParameter name="Sum1">
+					<subreportParameterExpression><![CDATA[$V{Sum_in}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="Sum2">
+					<subreportParameterExpression><![CDATA[$V{Sum_in2}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="Sum3">
+					<subreportParameterExpression><![CDATA[$V{Sun_out}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="Sum4">
+					<subreportParameterExpression><![CDATA[$V{Sum_out2}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR_Total}]]></subreportExpression>
+			</subreport>
+		</band>
+	</summary>
+</jasperReport>

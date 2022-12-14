@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="WHS021R" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="baa2cf3f-d8ac-4034-a13d-69a75cd3856a">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="M3OLD"/>
+	<parameter name="username" class="java.lang.String"/>
+	<parameter name="lot" class="java.lang.String"/>
+	<parameter name="whs" class="java.lang.String"/>
+	<parameter name="com" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT *
+FROM (
+
+
+select substr(t.mtrftx,6,3) AS  twh,t.mtitno,substr(m.MMFUDS,1,30) mmfuds,m.mmunms,t.mtbano,t.mtbref,
+           sum(t.mttrqt*-1) t_qty,sum(t.mtcawe*(t.mttrqt/abs(t.mttrqt))*1) t_cawe,
+           sum(t.mttrpr*t.mttrqt*-1) cost_price,t.mtwhlo
+from   mittra t,mitmas m
+where t.mtwhlo = $P{whs}
+   and  t.mtttyp  = 51
+   and  t.mtttid   = 'MVW'
+   and  t.mtcono = m.mmcono
+   and  t.mtitno  = m.mmitno
+   and  t.mtcono = $P{com}
+   and  ( (substr(t.mtbano,1,7) = substr($P{lot},1,7) or substr(t.mtbano,1,8) = substr($P{lot},1,8)) or (substr(t.mtbref,1,7) = substr($P{lot},1,7) or substr(t.mtbref,1,8) = substr($P{lot},1,8)) )
+--   and t.mtitno = 'GA00110A612'
+group by  substr(t.mtrftx,6,3),t.mtitno,substr(m.mmfuds,1,30),m.mmunms,t.mtbano,t.mtbref,t.mtwhlo
+order by  substr(t.mtrftx,6,3),t.mtitno,t.mtbano
+
+) AS a 
+
+LEFT JOIN  
+
+(
+
+
+ select substr(ccrow3,1,40)  as Ncono,ccwhlo
+  from M3FDBPRD.cmndiv 
+  where  cccono = '10'
+    and ccdivi > '000' 
+    
+) AS b 
+ON b.ccwhlo = a.mtwhlo 
+
+LEFT  JOIN 
+(
+
+ select mwwhnm as nwh , mwwhlo
+    from mitwhl
+    where mwwhlo = $P{whs}
+        and mwcono =$P{com}
+
+) AS c 
+ON c.mwwhlo =  a.mtwhlo 
+
+ORDER BY twh,MTITNO,mtbano]]>
+	</queryString>
+	<field name="TWH" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="TWH"/>
+		<property name="com.jaspersoft.studio.field.label" value="TWH"/>
+	</field>
+	<field name="MTITNO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTITNO"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTITNO"/>
+	</field>
+	<field name="MMFUDS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MMFUDS"/>
+		<property name="com.jaspersoft.studio.field.label" value="MMFUDS"/>
+	</field>
+	<field name="MMUNMS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MMUNMS"/>
+		<property name="com.jaspersoft.studio.field.label" value="MMUNMS"/>
+	</field>
+	<field name="MTBANO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTBANO"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTBANO"/>
+	</field>
+	<field name="MTBREF" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTBREF"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTBREF"/>
+	</field>
+	<field name="T_QTY" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="T_QTY"/>
+		<property name="com.jaspersoft.studio.field.label" value="T_QTY"/>
+	</field>
+	<field name="T_CAWE" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="T_CAWE"/>
+		<property name="com.jaspersoft.studio.field.label" value="T_CAWE"/>
+	</field>
+	<field name="COST_PRICE" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="COST_PRICE"/>
+		<property name="com.jaspersoft.studio.field.label" value="COST_PRICE"/>
+	</field>
+	<field name="MTWHLO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTWHLO"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTWHLO"/>
+	</field>
+	<field name="NCONO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NCONO"/>
+		<property name="com.jaspersoft.studio.field.label" value="NCONO"/>
+	</field>
+	<field name="CCWHLO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="CCWHLO"/>
+		<property name="com.jaspersoft.studio.field.label" value="CCWHLO"/>
+	</field>
+	<field name="NWH" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="NWH"/>
+		<property name="com.jaspersoft.studio.field.label" value="NWH"/>
+	</field>
+	<field name="MWWHLO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MWWHLO"/>
+		<property name="com.jaspersoft.studio.field.label" value="MWWHLO"/>
+	</field>
+	<variable name="Sum_caw" class="java.math.BigDecimal" resetType="Group" resetGroup="NameGroup" calculation="Sum">
+		<variableExpression><![CDATA[$F{T_CAWE}]]></variableExpression>
+	</variable>
+	<variable name="Sum_Qty" class="java.math.BigDecimal" resetType="Group" resetGroup="NameGroup" calculation="Sum">
+		<variableExpression><![CDATA[$F{T_QTY}]]></variableExpression>
+	</variable>
+	<variable name="Sumtotal" class="java.math.BigDecimal" resetType="Group" resetGroup="WHSGroup" calculation="Sum">
+		<variableExpression><![CDATA[$F{T_QTY}]]></variableExpression>
+	</variable>
+	<variable name="Sumtotal2" class="java.math.BigDecimal" resetType="Group" resetGroup="WHSGroup" calculation="Sum">
+		<variableExpression><![CDATA[$F{T_CAWE}]]></variableExpression>
+	</variable>
+	<group name="WHSGroup" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{TWH}]]></groupExpression>
+		<groupFooter>
+			<band height="19">
+				<textField pattern="#,##0.00">
+					<reportElement isPrintRepeatedValues="false" x="402" y="0" width="77" height="19" isRemoveLineWhenBlank="true" printWhenGroupChanges="NameGroup" forecolor="#2525FF" uuid="b920cf2a-806a-46b2-85e7-b14e7771d3bc"/>
+					<textElement>
+						<font fontName="TH SarabunPSK" size="12" isBold="true" isUnderline="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{Sumtotal}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement isPrintRepeatedValues="false" x="479" y="0" width="75" height="19" isRemoveLineWhenBlank="true" printWhenGroupChanges="NameGroup" forecolor="#2525FF" uuid="1471296e-018b-4c7a-9a43-a90251b7809e"/>
+					<textElement>
+						<font fontName="TH SarabunPSK" size="12" isBold="true" isUnderline="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{Sumtotal2}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="NameGroup">
+		<groupExpression><![CDATA[$F{MMFUDS}]]></groupExpression>
+		<groupFooter>
+			<band height="19">
+				<staticText>
+					<reportElement x="280" y="0" width="60" height="19" forecolor="#2525FF" uuid="432e5910-3a66-4be2-b638-886b1c1df0b6"/>
+					<textElement>
+						<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Total:]]></text>
+				</staticText>
+				<textField pattern="#,##0.00">
+					<reportElement isPrintRepeatedValues="false" x="402" y="0" width="77" height="19" isRemoveLineWhenBlank="true" printWhenGroupChanges="NameGroup" forecolor="#2525FF" uuid="27248366-c4c8-47f5-99a3-e58eff99d4a0"/>
+					<textElement>
+						<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{Sum_Qty}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement isPrintRepeatedValues="false" x="479" y="0" width="75" height="19" isRemoveLineWhenBlank="true" printWhenGroupChanges="NameGroup" forecolor="#2525FF" uuid="543b300e-dd8e-461f-bcac-3179b4029132"/>
+					<textElement>
+						<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{Sum_caw}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="95" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="31" width="50" height="19" forecolor="#2525FF" uuid="bfbfc41a-b6c9-415c-9c32-79aa0bf02b33"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Report :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="31" width="50" height="19" forecolor="#2525FF" uuid="bcc976db-aef5-4443-a0e4-fe77f3f97bf7"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WHS001R]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="50" width="50" height="18" forecolor="#2525FF" uuid="209cca9e-cdec-4504-a3a4-d0a790fbd7d5"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Username:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="50" y="50" width="50" height="18" forecolor="#2525FF" uuid="30e0a3a0-ba72-4f1f-960e-d62ede650428"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{username}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="12" width="100" height="19" forecolor="#2525FF" uuid="61fa5717-0d0e-4aa8-b42e-fc6238ae18b3"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ISSUE: 1/15 SEP 2005]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="450" y="0" width="50" height="18" forecolor="#2525FF" uuid="19266222-086c-451d-a91e-d9be46803663"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FO-H016-080]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="479" y="28" width="75" height="19" forecolor="#2525FF" uuid="5201c356-71c9-443f-969e-b7b46d1431c0"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd-MMM-yyyy HH:mm a").format(new Date())]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="449" y="28" width="30" height="19" forecolor="#2525FF" uuid="fa7e80be-dac7-46a9-8369-8342c61f66c9"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="449" y="47" width="30" height="20" forecolor="#2525FF" uuid="eb42384f-8256-44dc-b513-543bef559d18"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Page:]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="489" y="47" width="20" height="20" forecolor="#2525FF" uuid="1dcb300e-099c-4f0e-90e1-f1b18b295c89"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["of "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="479" y="47" width="10" height="20" forecolor="#2525FF" uuid="c3ea6e5b-40a1-45c5-b540-91d427df41d5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="181" y="77" width="50" height="18" forecolor="#810101" uuid="35055cb7-93fb-4050-8d4b-a93e1b21e958"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lot no:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="181" y="58" width="50" height="18" forecolor="#810101" uuid="ec7a26bc-90d9-4d8a-8ae4-899cf197e8e1"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Waehouse:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="231" y="58" width="40" height="18" forecolor="#810101" uuid="cff3f83a-7de0-48ff-9645-f7e5ac9e9b16"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{whs}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="231" y="77" width="60" height="18" forecolor="#810101" uuid="ad8bbb12-2da2-4939-b029-dda0d99cc949"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{lot}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="181" y="40" width="200" height="18" forecolor="#810101" uuid="d94c15e6-7a6f-42b9-811c-2dbd784d21a4"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SUMMARY TRANSFER BY LOT. REPORT]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="281" y="58" width="120" height="18" forecolor="#810101" uuid="db12048e-d0e3-45a2-a735-501ef647515f"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NWH}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="160" y="12" width="242" height="28" forecolor="#2525FF" uuid="aa9a566d-1d6a-4b0d-b368-fd3b6794d1a8"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NCONO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="18" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="40" height="18" forecolor="#2525FF" uuid="262563b6-f017-4065-bf00-b174dc21ed35"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="40" y="0" width="70" height="18" forecolor="#2525FF" uuid="134fb077-fc2d-486d-a71f-dc8926f6ca68"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="110" y="0" width="130" height="18" forecolor="#2525FF" uuid="e87ef56f-3163-4b63-af15-d7621a0cef25"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="240" y="0" width="40" height="18" forecolor="#2525FF" uuid="75304387-adab-4d58-8f5e-95c968bac5e0"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="280" y="0" width="60" height="18" forecolor="#2525FF" uuid="34496684-c8d7-4f04-8e9e-d7d08fdd025a"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="340" y="0" width="62" height="18" forecolor="#2525FF" uuid="b9a2fd0f-239d-4860-a75f-fa275f837359"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="479" y="0" width="75" height="18" forecolor="#2525FF" uuid="6b9da07c-2cd6-4a82-a515-c8e834613eb3"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="402" y="0" width="77" height="18" forecolor="#2525FF" uuid="07be830b-aa43-43f5-b7e7-c3101fdac3fb"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="0" width="40" height="18" forecolor="#2525FF" uuid="6e47aa4c-6784-441e-b16a-b2ade5199afb"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[T WHS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="40" y="0" width="70" height="18" forecolor="#2525FF" uuid="addd52d6-7e82-4944-b587-573ed59583eb"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="0" width="130" height="18" forecolor="#2525FF" uuid="405d9c9f-ed66-4c06-bfa6-96bcd8c0029a"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="240" y="0" width="40" height="18" forecolor="#2525FF" uuid="fd0d2ff7-2564-4465-869d-9ce1f5ef641f"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Unit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="0" width="60" height="18" forecolor="#2525FF" uuid="2c8284f5-55bd-4c91-9bf7-9b20701eb83d"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lot no]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="340" y="0" width="62" height="18" forecolor="#2525FF" uuid="96cd6342-6491-44bc-b9b9-21eb8c993e26"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lot no Ref]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="402" y="0" width="77" height="18" forecolor="#2525FF" uuid="5b3d54eb-76a5-41c0-af8c-ed0b5cf79191"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="479" y="0" width="75" height="18" forecolor="#2525FF" uuid="8b11100a-3da1-4015-9d6d-d5398a703de8"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Catch Weight]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="18" splitType="Stretch">
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="40" height="18" isRemoveLineWhenBlank="true" forecolor="#2525FF" uuid="395df274-e036-437c-bd01-f039dafcb935"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TWH}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="40" y="0" width="70" height="18" forecolor="#2525FF" uuid="92f22c45-a993-4724-9835-0f2eb35bf98b">
+					<printWhenExpression><![CDATA[new Boolean($V{NameGroup_COUNT}.intValue()==1)]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MTITNO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="110" y="0" width="130" height="18" forecolor="#2525FF" uuid="0076551c-0444-446d-8c96-b5697958112b">
+					<printWhenExpression><![CDATA[new Boolean($V{NameGroup_COUNT}.intValue()==1)]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MMFUDS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="240" y="0" width="40" height="18" isRemoveLineWhenBlank="true" forecolor="#2525FF" uuid="08903015-b245-4dac-b365-03878f4d4c02">
+					<printWhenExpression><![CDATA[new Boolean($V{NameGroup_COUNT}.intValue()==1)]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MMUNMS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="0" width="60" height="18" forecolor="#2525FF" uuid="ffa66ba7-6aa7-433a-965c-9d7e5f1167de"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MTBANO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="340" y="0" width="62" height="18" forecolor="#2525FF" uuid="309db2c0-0a45-44dd-8459-f973af76aaf4"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MTBREF}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="402" y="0" width="77" height="18" forecolor="#2525FF" uuid="904c21e1-eb19-4969-a304-72cd4ad20f87"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{T_QTY}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="479" y="0" width="75" height="18" forecolor="#2525FF" uuid="7e9b48da-7984-46b4-9489-45de63b31f2b"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{T_CAWE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

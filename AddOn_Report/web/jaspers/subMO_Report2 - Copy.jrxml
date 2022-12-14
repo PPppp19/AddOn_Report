@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.14.0.final using JasperReports Library version 6.14.0-2ab0d8625be255bf609c78e1181801213e51db8f  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subMO_Report1" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="652f1fd9-0a94-45c0-ab69-2e3263f8a55f">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DB2"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="144"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="849"/>
+	<property name="ireport.jasperserver.url" value="http://192.200.9.124:8080/jasperserver/"/>
+	<property name="ireport.jasperserver.user" value="jasperadmin"/>
+	<property name="ireport.jasperserver.report.resource" value="/MPM_REPORT/subMO_Report2_files/main_jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/MPM_REPORT/subMO_Report2"/>
+	<parameter name="cono" class="java.lang.String"/>
+	<parameter name="divi" class="java.lang.String"/>
+	<parameter name="fac" class="java.lang.String"/>
+	<parameter name="whs" class="java.lang.String"/>
+	<parameter name="mono" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[--Output Byproduct
+SELECT VHCONO,VHFACI,VHMFNO,VMMTNO,MMITDS,MMACTI,VMPEUN,VMREQA,VMRPQA,VMRPQA - VMREQA AS VAR_QTY
+,CASE WHEN VMRPQA = 0 OR VMREQA = 0 THEN 0 ELSE ROUND(CAST((VMRPQA / VMREQA) * 100 AS DECIMAL(15,4)),2) END AS VAR_PER
+FROM M3FDBPRD.MWOHED,M3FDBPRD.MWOMAT,M3FDBPRD.MITMAS
+WHERE VHCONO = $P{cono} 
+AND VHFACI = $P{fac} 
+AND VHWHLO = $P{whs} 
+AND VHMFHL = $P{mono} 
+AND VHMFHL = VHMFNO
+AND VHCONO = VMCONO
+AND VHFACI = VMFACI
+AND VHPRNO = VMPRNO
+AND VHMFNO = VMMFNO
+AND VMBYPR = 1
+AND (VMREQT <> 0 OR VMRPQT <> 0)
+AND VMCONO = MMCONO
+AND VMMTNO = MMITNO
+ORDER BY VHCONO,VHFACI,VHPRNO,VHSTDT,VHMFNO,VMBYPR,VMMSEQ]]>
+	</queryString>
+	<field name="VHCONO" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="VHCONO"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHCONO"/>
+	</field>
+	<field name="VHFACI" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VHFACI"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHFACI"/>
+	</field>
+	<field name="VHMFNO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VHMFNO"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHMFNO"/>
+	</field>
+	<field name="VMMTNO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VMMTNO"/>
+		<property name="com.jaspersoft.studio.field.label" value="VMMTNO"/>
+	</field>
+	<field name="MMITDS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MMITDS"/>
+		<property name="com.jaspersoft.studio.field.label" value="MMITDS"/>
+	</field>
+	<field name="MMACTI" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="MMACTI"/>
+		<property name="com.jaspersoft.studio.field.label" value="MMACTI"/>
+	</field>
+	<field name="VMPEUN" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VMPEUN"/>
+		<property name="com.jaspersoft.studio.field.label" value="VMPEUN"/>
+	</field>
+	<field name="VMREQA" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="VMREQA"/>
+		<property name="com.jaspersoft.studio.field.label" value="VMREQA"/>
+	</field>
+	<field name="VMRPQA" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="VMRPQA"/>
+		<property name="com.jaspersoft.studio.field.label" value="VMRPQA"/>
+	</field>
+	<field name="VAR_QTY" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="VAR_QTY"/>
+		<property name="com.jaspersoft.studio.field.label" value="VAR_QTY"/>
+	</field>
+	<field name="VAR_PER" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="VAR_PER"/>
+		<property name="com.jaspersoft.studio.field.label" value="VAR_PER"/>
+	</field>
+	<variable name="reQtyTotal" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{VMREQA}]]></variableExpression>
+	</variable>
+	<variable name="rpQtyTotal" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{VMRPQA}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="50" y="12" width="100" height="18" backcolor="#ADCF6D" uuid="9361ded3-70c1-4e5e-a471-b143fe434ac5">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="65ef7943-d916-4ae1-b5cf-eb4292bac157"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="150" y="12" width="130" height="18" backcolor="#ADCF6D" uuid="81ff1af5-e6c8-4868-aa9e-6373bb905d89">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="00fd778a-de57-4103-98da-3c6245934c40"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Description]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="280" y="12" width="55" height="18" backcolor="#ADCF6D" uuid="17691f86-21ee-47bc-bc4d-743bfaed2a4e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="86802aed-fe03-4f9b-986c-432132b7f7d4"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" isBold="true"/>
+				</textElement>
+				<text><![CDATA[UOM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="335" y="12" width="55" height="18" backcolor="#ADCF6D" uuid="f2ac5551-76c5-4dcd-b93c-a2f5f0967fbf">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="16ed78b5-10c8-439b-9142-a0bb3f57169e"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Plan STD QTY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="390" y="12" width="55" height="18" backcolor="#ADCF6D" uuid="86d51d6a-2a94-4cd4-83bd-70bb4242a7af">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d99dec5d-6908-4311-ac93-360d87901cb8"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="TH SarabunPSK" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MO ACT QTY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="12" width="50" height="18" backcolor="#ADCF6D" uuid="89f575bb-887a-4fe4-9af1-46b46b74c677">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="65ef7943-d916-4ae1-b5cf-eb4292bac157"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="445" y="12" width="55" height="18" backcolor="#ADCF6D" uuid="c91df785-aa34-4e49-b450-210a406c722c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bbc87cb4-73a9-4ffb-ae71-cd8cf69a7da5"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VAR_QTY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="500" y="12" width="55" height="18" backcolor="#ADCF6D" uuid="645e04da-3901-44ae-a840-645495665619">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="de00cfd1-b663-4608-b421-f42fe362edec"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VAR_PER]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="150" height="12" uuid="62ea98ee-9698-467f-ba6f-6dd4addfc2c7"/>
+				<textElement textAlignment="Left">
+					<font fontName="TH SarabunPSK" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[By Product :]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement x="50" y="0" width="100" height="13" uuid="eaf59e54-9b69-483d-8bf0-4930e31b9894">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="65ef7943-d916-4ae1-b5cf-eb4292bac157"/>
+				</reportElement>
+				<box leftPadding="1" rightPadding="1">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VMMTNO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="150" y="0" width="130" height="13" uuid="fd60559d-2139-410c-bacf-a30c9485e984">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="00fd778a-de57-4103-98da-3c6245934c40"/>
+				</reportElement>
+				<box leftPadding="1" rightPadding="1">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MMITDS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="0" width="55" height="13" uuid="f6938799-a19d-4bea-8aa4-5d1f28794c3e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="86802aed-fe03-4f9b-986c-432132b7f7d4"/>
+				</reportElement>
+				<box leftPadding="1" rightPadding="1">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VMPEUN}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="335" y="0" width="55" height="13" uuid="2bc657e1-da82-4861-9cda-e8cf50cf8a34">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="16ed78b5-10c8-439b-9142-a0bb3f57169e"/>
+				</reportElement>
+				<box leftPadding="1" rightPadding="1">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VMREQA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="390" y="0" width="55" height="13" uuid="f4bd0df6-f3a0-4df9-b2cc-863736956e28">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d99dec5d-6908-4311-ac93-360d87901cb8"/>
+				</reportElement>
+				<box leftPadding="1" rightPadding="1">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VMRPQA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="50" height="13" uuid="adffed58-1567-4160-9cc3-b56ff2014098"/>
+				<box leftPadding="1" rightPadding="1">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="445" y="0" width="55" height="13" uuid="c34d48fb-8c72-4fab-8d21-8ba4e14d6266">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bbc87cb4-73a9-4ffb-ae71-cd8cf69a7da5"/>
+				</reportElement>
+				<box leftPadding="1" rightPadding="1">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VAR_QTY}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="500" y="0" width="55" height="13" uuid="79f0ffed-b426-450e-b477-16bd63db4f3b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="de00cfd1-b663-4608-b421-f42fe362edec"/>
+				</reportElement>
+				<box leftPadding="1" rightPadding="1">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VAR_PER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="1" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="0" width="555" height="1" uuid="215178b9-05e0-4f8f-adee-ab5da02649f0"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

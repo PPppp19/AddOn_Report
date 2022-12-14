@@ -41,10 +41,6 @@
              <h4>In put & Out put Freeze,CTN</h4>
             <br>
             
-            <div class="details-form-field">
-                <label>From Date(yyyymmdd) :</label>
-                <input type="date" id="vFromdate" name="fdate" class="form-control">
-            </div>
             
             <div class="details-form-field">
                 <label>Facility :</label>
@@ -61,6 +57,12 @@
                 <select class="form-control form-control-user" name="whs" id="vWarehouse">
                     <option value="" selected="selected">Select Warehouse</option>
                 </select>
+            </div>
+            
+            
+            <div class="details-form-field">
+                <label>From Date(yyyymmdd) :</label>
+                <input type="date" id="vFromdate" name="fdate" class="form-control">
             </div>
 
         </form>

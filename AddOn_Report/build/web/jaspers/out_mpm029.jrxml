@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="0291" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="fa1be541-e477-456f-8559-97ea5e55ff63">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="M3OLD"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="net.sf.jasperreports.print.create.bookmarks" value="true"/>
+	<parameter name="whs" class="java.lang.String"/>
+	<parameter name="fdate" class="java.lang.String"/>
+	<parameter name="mono" class="java.lang.String"/>
+	<parameter name="com" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[
+
+
+ 
+SELECT a.vhwhlo,a.vhstdt,a.vhfstd,a.vhmfno,a.vhprno,a.mmfuds,a.vhwhst,c.mtprmf,c.mtbano1,
+      c.fg_qty,c.pcs2,COALESCE(c.pcs2,0) AS spcs2, COALESCE(c.fg_qty,0) AS sfg_qty
+ 
+FROM (
+select vhwhlo,vhstdt ,vhfstd,vhmfno,vhprno,mmfuds,vhwhst,vhcono
+from mwohed,mitmas,mpdhed
+where vhstdt = $P{fdate}
+  and vhwhlo  = $P{whs}
+  AND VHMFHL = $P{mono}
+  and vhfaci = phfaci
+  and vhprno = phprno
+  and vhprno = mmitno
+  AND vhcono =$P{com}
+  and phcono = vhcono
+  and mmcono = vhcono
+  and (substr(vhprno,12,1) = '2' or substr(vhprno,11,2) = '01' )
+order by vhwhlo,vhfstd,vhmfno 
+
+) AS a  
+LEFT JOIN 
+(
+select mtprmf,mtbano mtbano1,mtcono,
+       sum(mttrqt) fg_qty,
+       sum(mtcawe) pcs2
+from mittra,mitmas
+where mtttyp = 10
+     and mtcono = mmcono
+     and mtitno = mmitno
+     AND mtcono = $P{com}
+group by mtprmf,mtbano,mtcono
+order by mtprmf,mtbano
+
+) AS c 
+ON c.mtprmf = a.vhmfno 
+and a.vhcono = c.mtcono
+
+
+ORDER BY c.mtbano1]]>
+	</queryString>
+	<field name="VHWHLO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VHWHLO"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHWHLO"/>
+	</field>
+	<field name="VHSTDT" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="VHSTDT"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHSTDT"/>
+	</field>
+	<field name="VHFSTD" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="VHFSTD"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHFSTD"/>
+	</field>
+	<field name="VHMFNO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VHMFNO"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHMFNO"/>
+	</field>
+	<field name="VHPRNO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VHPRNO"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHPRNO"/>
+	</field>
+	<field name="MMFUDS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MMFUDS"/>
+		<property name="com.jaspersoft.studio.field.label" value="MMFUDS"/>
+	</field>
+	<field name="VHWHST" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="VHWHST"/>
+		<property name="com.jaspersoft.studio.field.label" value="VHWHST"/>
+	</field>
+	<field name="MTPRMF" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTPRMF"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTPRMF"/>
+	</field>
+	<field name="MTBANO1" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTBANO1"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTBANO1"/>
+	</field>
+	<field name="FG_QTY" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="FG_QTY"/>
+		<property name="com.jaspersoft.studio.field.label" value="FG_QTY"/>
+	</field>
+	<field name="PCS2" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="PCS2"/>
+		<property name="com.jaspersoft.studio.field.label" value="PCS2"/>
+	</field>
+	<field name="SPCS2" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="SPCS2"/>
+		<property name="com.jaspersoft.studio.field.label" value="SPCS2"/>
+	</field>
+	<field name="SFG_QTY" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="SFG_QTY"/>
+		<property name="com.jaspersoft.studio.field.label" value="SFG_QTY"/>
+	</field>
+	<variable name="Sum_out" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{FG_QTY}]]></variableExpression>
+	</variable>
+	<variable name="Sum_pcs2" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{PCS2}]]></variableExpression>
+	</variable>
+	<variable name="Sum_out1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{FG_QTY}]]></variableExpression>
+	</variable>
+	<variable name="Sum_out2" class="java.math.BigDecimal" incrementType="Group" incrementGroup="Group1" calculation="Sum">
+		<variableExpression><![CDATA[$V{SSum_PCS2}]]></variableExpression>
+	</variable>
+	<variable name="SSum_PCS2" class="java.math.BigDecimal" resetType="Group" resetGroup="Group1" calculation="Sum">
+		<variableExpression><![CDATA[$F{SPCS2}]]></variableExpression>
+	</variable>
+	<variable name="SSum_out" class="java.math.BigDecimal" resetType="Group" resetGroup="Group1" calculation="Sum">
+		<variableExpression><![CDATA[$F{SFG_QTY}]]></variableExpression>
+	</variable>
+	<variable name="V_out" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$F{PCS2}]]></variableExpression>
+	</variable>
+	<group name="NameGroup">
+		<groupExpression><![CDATA[$F{MMFUDS}]]></groupExpression>
+	</group>
+	<group name="Group1">
+		<groupExpression><![CDATA[$F{MMFUDS}]]></groupExpression>
+		<groupFooter>
+			<band height="20">
+				<staticText>
+					<reportElement x="51" y="0" width="51" height="20" isRemoveLineWhenBlank="true" uuid="2e122821-a60b-4690-abe6-219c11348855">
+						<printWhenExpression><![CDATA[$F{MTPRMF} != null]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Total: ]]></text>
+				</staticText>
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
+					<reportElement x="102" y="0" width="36" height="20" isRemoveLineWhenBlank="true" uuid="cb2de152-4956-47ef-abff-95149d805b0f">
+						<printWhenExpression><![CDATA[$F{MTPRMF} != null]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SSum_out}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
+					<reportElement x="138" y="0" width="36" height="20" isRemoveLineWhenBlank="true" uuid="88ca9194-ce3b-481f-ac6a-0cb4b09f21a1">
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+						<printWhenExpression><![CDATA[$F{MTPRMF} != null]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SSum_PCS2}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="OutGroup">
+		<groupExpression><![CDATA[$F{FG_QTY}]]></groupExpression>
+	</group>
+	<group name="Group2">
+		<groupExpression><![CDATA[$F{MTBANO1}]]></groupExpression>
+	</group>
+	<group name="itemGroup">
+		<groupExpression><![CDATA[$F{MTBANO1}]]></groupExpression>
+	</group>
+	<group name="MoGroup">
+		<groupExpression><![CDATA[$F{MTPRMF}]]></groupExpression>
+	</group>
+	<group name="Group3">
+		<groupExpression><![CDATA[$F{MTBANO1}]]></groupExpression>
+	</group>
+	<group name="Mo2Group">
+		<groupExpression><![CDATA[$F{MTPRMF}]]></groupExpression>
+	</group>
+	<group name="FG_GROUP">
+		<groupExpression><![CDATA[$F{FG_QTY}]]></groupExpression>
+	</group>
+	<group name="Grouppp">
+		<groupExpression><![CDATA[$F{MTPRMF}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement isPrintRepeatedValues="false" x="138" y="0" width="36" height="20" isRemoveLineWhenBlank="true" printWhenGroupChanges="Group1" uuid="ba5fec0b-1b88-4416-ba7e-57e75901fedc">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="48620ac8-d5f5-4faa-999d-62ea8e42a31e"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<printWhenExpression><![CDATA[$F{MTPRMF} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SPCS2}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="51" height="20" isRemoveLineWhenBlank="true" forecolor="#FF0303" uuid="9226de04-c202-4c6f-99af-96c64d95b0d1">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="48620ac8-d5f5-4faa-999d-62ea8e42a31e"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<printWhenExpression><![CDATA[($F{MTPRMF} == null) ? true: new Boolean($V{NameGroup_COUNT}.intValue()==1)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MTPRMF}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement isPrintRepeatedValues="false" x="102" y="0" width="36" height="20" isRemoveLineWhenBlank="true" printWhenGroupChanges="Group1" uuid="c4116080-39d0-448e-9cd6-d8aa047543ca">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="48620ac8-d5f5-4faa-999d-62ea8e42a31e"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<printWhenExpression><![CDATA[$F{MTPRMF} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SFG_QTY}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement isPrintRepeatedValues="false" x="51" y="0" width="51" height="20" isRemoveLineWhenBlank="true" printWhenGroupChanges="Group1" uuid="1adef03f-b0c3-4385-87c3-10f6abf41d4a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="48620ac8-d5f5-4faa-999d-62ea8e42a31e"/>
+					<printWhenExpression><![CDATA[$F{MTPRMF} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MTBANO1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

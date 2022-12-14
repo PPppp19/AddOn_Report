@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sub3" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="54975c54-be03-4810-a9fb-b7209556f109">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="M3OLD"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="com" class="java.lang.String"/>
+	<parameter name="mono" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[select mtridn,mtttyp,mtrftx,mtitno,mmfuds,mtwhlo,mtwhsl,mtbano,mttrpr,
+           mttrqt rm_qty4,mmunms,mttrdt,
+           mttrpr*mttrqt amt4,
+           mtcawe pcs4
+from mittra,mitmas
+where  mtttyp = 13
+     and mtcono = mmcono
+      and mtcono = $P{com}
+     and mtitno = mmitno
+     AND mtridn = $P{mono}
+order by mtitno]]>
+	</queryString>
+	<field name="MTRIDN" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTRIDN"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTRIDN"/>
+	</field>
+	<field name="MTTTYP" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="MTTTYP"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTTTYP"/>
+	</field>
+	<field name="MTRFTX" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTRFTX"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTRFTX"/>
+	</field>
+	<field name="MTITNO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTITNO"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTITNO"/>
+	</field>
+	<field name="MMFUDS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MMFUDS"/>
+		<property name="com.jaspersoft.studio.field.label" value="MMFUDS"/>
+	</field>
+	<field name="MTWHLO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTWHLO"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTWHLO"/>
+	</field>
+	<field name="MTWHSL" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTWHSL"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTWHSL"/>
+	</field>
+	<field name="MTBANO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTBANO"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTBANO"/>
+	</field>
+	<field name="MTTRPR" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="MTTRPR"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTTRPR"/>
+	</field>
+	<field name="RM_QTY4" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="RM_QTY4"/>
+		<property name="com.jaspersoft.studio.field.label" value="RM_QTY4"/>
+	</field>
+	<field name="MMUNMS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MMUNMS"/>
+		<property name="com.jaspersoft.studio.field.label" value="MMUNMS"/>
+	</field>
+	<field name="MTTRDT" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="MTTRDT"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTTRDT"/>
+	</field>
+	<field name="AMT4" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="AMT4"/>
+		<property name="com.jaspersoft.studio.field.label" value="AMT4"/>
+	</field>
+	<field name="PCS4" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="PCS4"/>
+		<property name="com.jaspersoft.studio.field.label" value="PCS4"/>
+	</field>
+	<variable name="Sum_Qty" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{RM_QTY4}]]></variableExpression>
+	</variable>
+	<variable name="Sum_CW" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{PCS4}]]></variableExpression>
+	</variable>
+	<variable name="Sum_Amt" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{AMT4}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<printWhenExpression><![CDATA[$V{PAGE_NUMBER}==1]]></printWhenExpression>
+			<staticText>
+				<reportElement x="0" y="0" width="40" height="20" isRemoveLineWhenBlank="true" forecolor="#A42084" uuid="ba8a20ff-b2b5-492d-91d6-79f0f9a42d2b"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Type]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="40" y="0" width="40" height="20" isRemoveLineWhenBlank="true" forecolor="#A42084" uuid="232ddc4e-aa05-40ba-ad38-e6172d71857e"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MTTTYP}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="0" y="20" width="80" height="20" isRemoveLineWhenBlank="true" uuid="d81315fd-d6e9-48e2-85cc-89826d4b0477"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="80" y="20" width="196" height="20" isRemoveLineWhenBlank="true" uuid="461c1561-7a24-442b-80a4-7d43fc921892"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="330" y="20" width="54" height="20" isRemoveLineWhenBlank="true" uuid="abf3a0e9-8882-4132-a4ce-6e7615ea8640"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="384" y="20" width="34" height="20" isRemoveLineWhenBlank="true" uuid="3a5ed704-b1b1-4c34-80d7-e70e58a0db53"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="418" y="20" width="34" height="20" isRemoveLineWhenBlank="true" uuid="f310d33d-c925-414e-8520-12e26dfbe073"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="486" y="20" width="34" height="20" isRemoveLineWhenBlank="true" uuid="a3b4965e-2a01-4b4a-9dbc-f507051cb6e4"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="520" y="20" width="35" height="20" isRemoveLineWhenBlank="true" uuid="6532567e-61f8-4645-8906-364fd602b6b7"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="452" y="20" width="34" height="20" isRemoveLineWhenBlank="true" uuid="ef917d6c-9091-4ee9-be11-4a810b7d6fe1"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="276" y="20" width="54" height="20" isRemoveLineWhenBlank="true" uuid="9a8359cf-b70d-4661-9a42-5f2258db4240"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="20" width="80" height="20" isRemoveLineWhenBlank="true" uuid="7aea310c-67c1-44c5-b127-8cf82ba514c8"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="80" y="20" width="190" height="20" isRemoveLineWhenBlank="true" uuid="6fe7c330-8bc8-4945-bb82-80b5ecec82fc"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="324" y="20" width="54" height="20" isRemoveLineWhenBlank="true" uuid="e77154dc-a61e-4841-8526-63fc534136f6"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="378" y="20" width="34" height="20" isRemoveLineWhenBlank="true" uuid="143558f0-f448-4db7-a981-42c9ecc5dc5c"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="412" y="20" width="34" height="20" isRemoveLineWhenBlank="true" uuid="8a1c9f50-c889-4348-8c66-cf9239b0d478"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="480" y="20" width="34" height="20" isRemoveLineWhenBlank="true" uuid="6f5b49cb-698c-45c2-9973-829e7d1eb0d1"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="514" y="20" width="41" height="20" isRemoveLineWhenBlank="true" uuid="c037bd49-c2de-4078-a5a7-be3cd7149456"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="446" y="20" width="34" height="20" isRemoveLineWhenBlank="true" uuid="4c494e07-5a06-4f51-b435-81d255cae0e2"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="270" y="20" width="54" height="20" isRemoveLineWhenBlank="true" uuid="46f9b92d-d478-4b58-bc61-bf210ed485e8"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="20" width="80" height="20" isRemoveLineWhenBlank="true" uuid="93c87f4b-fbdf-45f2-9020-af34d4fa8e77"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="80" y="20" width="190" height="20" isRemoveLineWhenBlank="true" uuid="e9ae8382-30d8-48b8-9d90-0b703ca3e3d4"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="324" y="20" width="54" height="20" isRemoveLineWhenBlank="true" uuid="448ba6a9-26f8-42d0-a767-b71f7b15cd70"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="378" y="20" width="34" height="20" isRemoveLineWhenBlank="true" uuid="30b68159-578a-4871-9a76-46ca887680ae"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="412" y="20" width="34" height="20" isRemoveLineWhenBlank="true" uuid="428426a7-fb0a-4470-b079-4b186223ce6f"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="20" width="80" height="20" isRemoveLineWhenBlank="true" forecolor="#141AFF" uuid="b56cc659-cb2c-4e3c-8ea5-9242a1546c26"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Material ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="20" width="190" height="20" isRemoveLineWhenBlank="true" forecolor="#141AFF" uuid="e651262f-6b00-4b59-82db-8788f54958a0"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="324" y="20" width="54" height="20" isRemoveLineWhenBlank="true" forecolor="#141AFF" uuid="15f82692-e915-43e2-b45a-10014dcaa7d1"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lotno]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="378" y="20" width="34" height="20" isRemoveLineWhenBlank="true" forecolor="#141AFF" uuid="b2e85b08-0e72-4431-b8d5-cd89ac9ee94b"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Unit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="412" y="20" width="34" height="20" isRemoveLineWhenBlank="true" forecolor="#141AFF" uuid="b127ed37-eabb-4d97-818a-1d0cbcc82d26"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="480" y="20" width="34" height="20" isRemoveLineWhenBlank="true" uuid="58f6c71c-9827-4aa6-b7f3-9acfc1a20fd4"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="480" y="20" width="34" height="20" isRemoveLineWhenBlank="true" forecolor="#141AFF" uuid="cc7e3ff8-5019-4807-822e-cceaf96fcd70"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[U/P]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="514" y="20" width="41" height="20" isRemoveLineWhenBlank="true" uuid="e7623c0c-9eb6-4bac-b390-caf935ebee6d"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="514" y="20" width="41" height="20" isRemoveLineWhenBlank="true" forecolor="#141AFF" uuid="1c976d94-0494-4865-8432-544618747a05"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Amt]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="446" y="20" width="34" height="20" isRemoveLineWhenBlank="true" uuid="faf8adca-4a72-4257-84ef-c83daa52422e"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="446" y="20" width="34" height="20" isRemoveLineWhenBlank="true" forecolor="#141AFF" uuid="1cb7b4d6-77c3-466b-86ba-f9384eb68875"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CW]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="270" y="20" width="54" height="20" isRemoveLineWhenBlank="true" uuid="980af868-1cf5-403c-8396-bc432f6b6f3b"/>
+				<graphicElement>
+					<pen lineColor="#141AFF"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="270" y="20" width="54" height="20" isRemoveLineWhenBlank="true" forecolor="#141AFF" uuid="13e24dff-67c7-4bf6-91b8-d21bf50c2a25"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tra Date]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="80" y="0" width="190" height="20" forecolor="#2525FF" uuid="9125e813-6a7a-47a4-bc78-9f42c698efb9"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MMFUDS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="514" y="0" width="41" height="20" forecolor="#2525FF" uuid="832dd639-4ccc-4c7e-b833-6a0d51291bf8"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AMT4}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="324" y="0" width="54" height="20" forecolor="#2525FF" uuid="a8570c0a-c0eb-4fd9-9022-e2ae8247d40f"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MTBANO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="480" y="0" width="34" height="20" forecolor="#2525FF" uuid="73455ad8-de8e-49f9-a075-90ccec67a21d"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MTTRPR}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="80" height="20" forecolor="#2525FF" uuid="8d9de1df-1076-4d16-8fa9-f3ed5e011f43"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MTITNO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="446" y="0" width="34" height="20" forecolor="#2525FF" uuid="9cc2351b-3c82-454f-a3a7-ed9eed15c451"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PCS4}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="378" y="0" width="34" height="20" forecolor="#2525FF" uuid="a1540261-ed5c-4b21-994c-159ce93ecebb"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MMUNMS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="270" y="0" width="54" height="20" forecolor="#2525FF" uuid="875f68cf-0a03-433c-8586-5010ce46fdd4"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MTTRDT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="412" y="0" width="34" height="20" forecolor="#2525FF" uuid="42fc1273-1e2d-4607-8627-76822c3b21f5"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RM_QTY4}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="20" splitType="Stretch">
+			<textField pattern="#,##0.00">
+				<reportElement x="418" y="0" width="34" height="20" forecolor="#810101" uuid="0db8d801-b51b-4cc3-9054-fb6ca83298ee"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="13" isBold="true" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Sum_Qty}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="520" y="0" width="35" height="20" forecolor="#810101" uuid="e3a97d07-daac-437f-94f6-3c520fc663f1"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="13" isBold="true" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Sum_Amt}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="452" y="0" width="34" height="20" forecolor="#810101" uuid="6d12f3b0-ff29-4d4d-8091-d057d8ad3e1e"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="13" isBold="true" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Sum_CW}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="418" height="20" isRemoveLineWhenBlank="true" forecolor="#A42084" uuid="19659565-d568-462d-86b9-e0ba2b500340"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

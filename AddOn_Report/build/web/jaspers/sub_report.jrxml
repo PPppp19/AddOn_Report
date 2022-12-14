@@ -7,116 +7,22 @@
 	<parameter name="Mono" class="java.lang.String"/>
 	<parameter name="Company" class="java.lang.String"/>
 	<queryString language="SQL">
-		<![CDATA[SELECT  * 
-
-FROM (
-select vhcono,vhfaci,vhorty,vhfstd,vhprno,mmfuds,vhmfno,phexpc,vhwhst
-from mwohed,mitmas,mpdhed
-where vhfaci =  $P{Fac}
-  and vhmfno = $P{Mono}
-  and  vhfaci = phfaci
-  and  vhprno = phprno
-  and vhprno = mmitno
-  and vhcono =   $P{Company}
-  and vhcono = phcono
-  and vhcono = mmcono
-order by vhcono,vhfaci,vhorty,vhfstd,vhprno,vhmfno
-
-
-)  AS q1
-LEFT JOIN  
-(
-
-select mtridn,mtttyp,mtitno,mmfuds,mmunms,mtbano,
-           sum(mttrqt) rm_qty,
-           sum(mttrpr*mttrqt*-1.00) amt,sum(mtcawe)  pcs
+		<![CDATA[select mtridn ,mtttyp ,mtbano,mtitno , mmitds , mmfuds AS mmfuds2,mmunms, 
+   			 sum(mttrqt) rm_qty,
+             Cast (sum(mttrqt) AS decimal(10,2)) / Cast (sum(mtcawe) AS decimal(10,2))  AS V1,
+           sum(mttrpr*mttrqt) amt,sum(mtcawe) pcs
 from mittra,mitmas
 where  mtttyp = 11
      and mtcono = mmcono
      and mtitno = mmitno
-     and mtcono = $P{Company}
-group by mtridn,mtttyp,mtitno,mmfuds,mmunms,mtbano
-order by mtitno,mtbano
-
-)  AS q2
-
-ON 
-    q1.vhmfno = q2.mtridn
-    
-    
-LEFT  JOIN  
-(
-select mtttyp mtttyp3,mtprmf,mtbano mtbano2,
-           sum(mttrqt) rm_qty1,
-           sum(mttrpr*mttrqt) amt1,sum(mtcawe)  pcs2
-from mittra,mitmas
-where mtttyp = 10
-     and mtcono = mmcono
-     and mtitno = mmitno
-     and  mtcono =  $P{Company}
-group by mtttyp,mtprmf,mtbano
-order by mtbano2
-
-
-) AS q3
-
-ON  q1.vhmfno = q3.mtprmf
-
-LEFT  JOIN
-
-(
-
-select mtridn mtridn3,mtttyp mtttyp1,mtbano mtbano3,
-           sum(mttrqt) rm_qty4,
-           sum(mttrpr*mttrqt) amt4,sum(mtcawe) pcs3
-from mittra,mitmas
-where  mtttyp = 13
-     and mtcono = mmcono
-     and mtitno = mmitno
      and mtcono =  $P{Company}
-group by mtridn,mtttyp,mtbano
-order by mtbano3
+     AND mtridn = $P{Mono}
+group by mtridn,mtttyp,mtbano,mtitno,mmitds,mmfuds,mmunms
 
 
-) AS q
-ON  q1.vhmfno = q.mtridn3]]>
+
+order by mtitno]]>
 	</queryString>
-	<field name="VHCONO" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="VHCONO"/>
-		<property name="com.jaspersoft.studio.field.label" value="VHCONO"/>
-	</field>
-	<field name="VHFACI" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="VHFACI"/>
-		<property name="com.jaspersoft.studio.field.label" value="VHFACI"/>
-	</field>
-	<field name="VHORTY" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="VHORTY"/>
-		<property name="com.jaspersoft.studio.field.label" value="VHORTY"/>
-	</field>
-	<field name="VHFSTD" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="VHFSTD"/>
-		<property name="com.jaspersoft.studio.field.label" value="VHFSTD"/>
-	</field>
-	<field name="VHPRNO" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="VHPRNO"/>
-		<property name="com.jaspersoft.studio.field.label" value="VHPRNO"/>
-	</field>
-	<field name="MMFUDS" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="MMFUDS"/>
-		<property name="com.jaspersoft.studio.field.label" value="MMFUDS"/>
-	</field>
-	<field name="VHMFNO" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="VHMFNO"/>
-		<property name="com.jaspersoft.studio.field.label" value="VHMFNO"/>
-	</field>
-	<field name="PHEXPC" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="PHEXPC"/>
-		<property name="com.jaspersoft.studio.field.label" value="PHEXPC"/>
-	</field>
-	<field name="VHWHST" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="VHWHST"/>
-		<property name="com.jaspersoft.studio.field.label" value="VHWHST"/>
-	</field>
 	<field name="MTRIDN" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="MTRIDN"/>
 		<property name="com.jaspersoft.studio.field.label" value="MTRIDN"/>
@@ -125,25 +31,33 @@ ON  q1.vhmfno = q.mtridn3]]>
 		<property name="com.jaspersoft.studio.field.name" value="MTTTYP"/>
 		<property name="com.jaspersoft.studio.field.label" value="MTTTYP"/>
 	</field>
+	<field name="MTBANO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MTBANO"/>
+		<property name="com.jaspersoft.studio.field.label" value="MTBANO"/>
+	</field>
 	<field name="MTITNO" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="MTITNO"/>
 		<property name="com.jaspersoft.studio.field.label" value="MTITNO"/>
 	</field>
-	<field name="COLUMN_13" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="MMFUDS"/>
-		<property name="com.jaspersoft.studio.field.label" value="MMFUDS"/>
+	<field name="MMITDS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MMITDS"/>
+		<property name="com.jaspersoft.studio.field.label" value="MMITDS"/>
+	</field>
+	<field name="MMFUDS2" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MMFUDS2"/>
+		<property name="com.jaspersoft.studio.field.label" value="MMFUDS2"/>
 	</field>
 	<field name="MMUNMS" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="MMUNMS"/>
 		<property name="com.jaspersoft.studio.field.label" value="MMUNMS"/>
 	</field>
-	<field name="MTBANO" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="MTBANO"/>
-		<property name="com.jaspersoft.studio.field.label" value="MTBANO"/>
-	</field>
 	<field name="RM_QTY" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.name" value="RM_QTY"/>
 		<property name="com.jaspersoft.studio.field.label" value="RM_QTY"/>
+	</field>
+	<field name="V1" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="V1"/>
+		<property name="com.jaspersoft.studio.field.label" value="V1"/>
 	</field>
 	<field name="AMT" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.name" value="AMT"/>
@@ -153,59 +67,20 @@ ON  q1.vhmfno = q.mtridn3]]>
 		<property name="com.jaspersoft.studio.field.name" value="PCS"/>
 		<property name="com.jaspersoft.studio.field.label" value="PCS"/>
 	</field>
-	<field name="MTTTYP3" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="MTTTYP3"/>
-		<property name="com.jaspersoft.studio.field.label" value="MTTTYP3"/>
-	</field>
-	<field name="MTPRMF" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="MTPRMF"/>
-		<property name="com.jaspersoft.studio.field.label" value="MTPRMF"/>
-	</field>
-	<field name="MTBANO2" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="MTBANO2"/>
-		<property name="com.jaspersoft.studio.field.label" value="MTBANO2"/>
-	</field>
-	<field name="RM_QTY1" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="RM_QTY1"/>
-		<property name="com.jaspersoft.studio.field.label" value="RM_QTY1"/>
-	</field>
-	<field name="AMT1" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="AMT1"/>
-		<property name="com.jaspersoft.studio.field.label" value="AMT1"/>
-	</field>
-	<field name="PCS2" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="PCS2"/>
-		<property name="com.jaspersoft.studio.field.label" value="PCS2"/>
-	</field>
-	<field name="MTRIDN3" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="MTRIDN3"/>
-		<property name="com.jaspersoft.studio.field.label" value="MTRIDN3"/>
-	</field>
-	<field name="MTTTYP1" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="MTTTYP1"/>
-		<property name="com.jaspersoft.studio.field.label" value="MTTTYP1"/>
-	</field>
-	<field name="MTBANO3" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="MTBANO3"/>
-		<property name="com.jaspersoft.studio.field.label" value="MTBANO3"/>
-	</field>
-	<field name="RM_QTY4" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="RM_QTY4"/>
-		<property name="com.jaspersoft.studio.field.label" value="RM_QTY4"/>
-	</field>
-	<field name="AMT4" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="AMT4"/>
-		<property name="com.jaspersoft.studio.field.label" value="AMT4"/>
-	</field>
-	<field name="PCS3" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="PCS3"/>
-		<property name="com.jaspersoft.studio.field.label" value="PCS3"/>
-	</field>
 	<variable name="Sum_Qty" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{RM_QTY}]]></variableExpression>
 	</variable>
 	<variable name="Sum_PCS" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{PCS}]]></variableExpression>
+	</variable>
+	<variable name="Sum_amt" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$V{avg_pcs}]]></variableExpression>
+	</variable>
+	<variable name="avg_pcs" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$F{RM_QTY}.compareTo(BigDecimal.ZERO) == 0 ? new BigDecimal(0) : 
+$F{PCS}.compareTo(BigDecimal.ZERO) == 0 ?  new BigDecimal(0) :
+$F{RM_QTY} == null? new BigDecimal(0) :
+ $F{PCS}== null? new BigDecimal(0) : $F{V1}]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -215,105 +90,126 @@ ON  q1.vhmfno = q.mtridn3]]>
 			<staticText>
 				<reportElement x="0" y="0" width="40" height="30" forecolor="#A42084" uuid="2626c141-db55-4df6-b93a-58818953307d"/>
 				<textElement>
-					<font isBold="true"/>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Type]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="30" width="80" height="20" forecolor="#141AFF" uuid="95c1abce-016e-4c95-9bde-5b4b92f8da61"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Material ]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="40" y="0" width="40" height="30" forecolor="#A42084" uuid="a06b9f96-95fd-429c-90c3-0afd0307b134"/>
 				<textElement>
-					<font isBold="true"/>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{MTTTYP}]]></textFieldExpression>
 			</textField>
+			<rectangle>
+				<reportElement x="400" y="30" width="60" height="20" forecolor="#2525FF" uuid="c31e6fcb-3d21-4e79-b57f-add5ae42d0ee"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="320" y="30" width="80" height="20" forecolor="#2525FF" uuid="d08ca4a0-3169-4216-aa9a-f0efbee1df88"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="270" y="30" width="50" height="20" forecolor="#2525FF" uuid="d07f602d-b734-4c90-a91a-7ddead733328"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="240" y="30" width="30" height="20" forecolor="#2525FF" uuid="ed4ae2a8-8060-4770-8635-9de31b8c3857"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="80" y="30" width="160" height="20" forecolor="#2525FF" uuid="0361a085-9b58-48a3-9bca-4b598ea28ac5"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="30" width="80" height="20" forecolor="#2525FF" uuid="2234fe89-4aa5-49fb-b5c4-fe63b4dc9fd0"/>
+			</rectangle>
 			<staticText>
-				<reportElement x="80" y="30" width="190" height="20" forecolor="#141AFF" uuid="f2a88844-7c22-490a-8e6d-2e33ee7b6810"/>
+				<reportElement x="400" y="30" width="60" height="20" forecolor="#141AFF" uuid="65cdc42a-e9b4-4c08-a406-a127c4a87f63"/>
 				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Name]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="270" y="30" width="30" height="20" forecolor="#141AFF" uuid="28ba8537-4ee9-43e5-8fef-ca5007d5b594"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Unit]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="300" y="30" width="40" height="20" forecolor="#141AFF" uuid="dafdbe2d-eb13-4e7b-80ef-c720f8c94da0"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Lot]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="340" y="30" width="40" height="20" forecolor="#141AFF" uuid="c6d5242b-e994-484e-904e-1f7f187896f1"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Qty]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="380" y="30" width="40" height="20" forecolor="#141AFF" uuid="65cdc42a-e9b4-4c08-a406-a127c4a87f63"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement>
-					<font isBold="true"/>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[PCS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="420" y="30" width="60" height="20" forecolor="#141AFF" uuid="357f4fc9-0824-4dc9-a1df-0f47f3f6a034"/>
+				<reportElement x="270" y="30" width="50" height="20" forecolor="#141AFF" uuid="dafdbe2d-eb13-4e7b-80ef-c720f8c94da0"/>
 				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement>
-					<font isBold="true"/>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lot]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="240" y="30" width="30" height="20" forecolor="#141AFF" uuid="28ba8537-4ee9-43e5-8fef-ca5007d5b594"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Unit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="30" width="80" height="20" forecolor="#141AFF" uuid="95c1abce-016e-4c95-9bde-5b4b92f8da61"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Material ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="30" width="160" height="20" forecolor="#141AFF" uuid="f2a88844-7c22-490a-8e6d-2e33ee7b6810"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="320" y="30" width="80" height="20" forecolor="#141AFF" uuid="c6d5242b-e994-484e-904e-1f7f187896f1"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="460" y="30" width="95" height="20" forecolor="#2525FF" uuid="1b95daf7-e353-4a68-821c-77bdb1bfd4df"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="460" y="30" width="95" height="20" forecolor="#141AFF" uuid="b43dec84-1a26-40b0-8f7e-d6a3fd583196"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Avg. PCS]]></text>
 			</staticText>
@@ -323,49 +219,84 @@ ON  q1.vhmfno = q.mtridn3]]>
 		<band height="20" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="80" height="20" forecolor="#141AFF" uuid="56256ede-bf9d-470a-bb0e-49a2b0c12a9e"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{MTITNO}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="80" y="0" width="190" height="20" forecolor="#141AFF" uuid="03c95d1e-3abd-4239-9585-1d9cb6ff1ca4"/>
-				<textFieldExpression><![CDATA[$F{MMFUDS}]]></textFieldExpression>
+				<reportElement x="80" y="0" width="160" height="20" forecolor="#141AFF" uuid="03c95d1e-3abd-4239-9585-1d9cb6ff1ca4"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MMFUDS2}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="270" y="0" width="30" height="20" forecolor="#141AFF" uuid="1ebd6694-ed3d-47a6-9bf1-68b5b90825ad"/>
+				<reportElement x="240" y="0" width="30" height="20" forecolor="#141AFF" uuid="1ebd6694-ed3d-47a6-9bf1-68b5b90825ad"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{MMUNMS}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="300" y="0" width="40" height="20" forecolor="#141AFF" uuid="433fd199-d268-4b3c-a3ef-d26e9f020cc9"/>
+				<reportElement x="270" y="0" width="50" height="20" forecolor="#141AFF" uuid="433fd199-d268-4b3c-a3ef-d26e9f020cc9"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{MTBANO}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,###.##">
-				<reportElement x="340" y="0" width="40" height="20" forecolor="#141AFF" uuid="aa699a3e-c340-4dbb-9739-eacd765383bd"/>
+			<textField pattern="#,##0.00">
+				<reportElement x="320" y="0" width="80" height="20" forecolor="#141AFF" uuid="aa699a3e-c340-4dbb-9739-eacd765383bd"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{RM_QTY}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,###.##">
-				<reportElement x="380" y="0" width="40" height="20" forecolor="#141AFF" uuid="e1726fa9-d099-4481-8050-67de43c8f60f"/>
+			<textField pattern="#,##0.00">
+				<reportElement x="400" y="0" width="60" height="20" forecolor="#141AFF" uuid="e1726fa9-d099-4481-8050-67de43c8f60f"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{PCS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="460" y="0" width="95" height="20" forecolor="#141AFF" uuid="44d2f61c-eaa3-4779-9e6b-264f87be7f71"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{avg_pcs}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<summary>
 		<band height="20" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="340" height="20" forecolor="#A42084" uuid="4de11616-9582-43cd-95d7-65464cfb7097"/>
+				<reportElement x="0" y="0" width="320" height="20" forecolor="#A42084" uuid="4de11616-9582-43cd-95d7-65464cfb7097"/>
 				<textElement>
-					<font isBold="true"/>
+					<font fontName="TH SarabunPSK" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total:]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="340" y="0" width="40" height="20" forecolor="#810101" uuid="df02f621-0480-4a47-b8e7-df633cf14073"/>
+			<textField pattern="#,##0.00">
+				<reportElement x="320" y="0" width="80" height="20" forecolor="#810101" uuid="df02f621-0480-4a47-b8e7-df633cf14073"/>
+				<textElement markup="none">
+					<font fontName="TH SarabunPSK" size="12" isBold="true" isUnderline="true"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$V{Sum_Qty}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,###.##">
-				<reportElement x="380" y="0" width="40" height="20" forecolor="#810101" uuid="aa068df5-41bd-4563-ae50-21155a358691"/>
+			<textField pattern="#,##0.00">
+				<reportElement x="400" y="0" width="60" height="20" forecolor="#810101" uuid="aa068df5-41bd-4563-ae50-21155a358691"/>
 				<textElement>
-					<font isUnderline="true"/>
+					<font fontName="TH SarabunPSK" size="12" isBold="true" isUnderline="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{Sum_PCS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="460" y="0" width="95" height="20" forecolor="#810101" uuid="dc035c94-8c65-44c5-9ec4-5a24200766a3"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="12" isBold="true" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Sum_amt}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
